@@ -1,0 +1,9 @@
+talent_profil:
+  resource: "@TalentBundle/Resources/config/routing/profil.yml"
+  prefix:   /profil
+event_homepage:
+  path:     /
+  defaults: { _controller: TalentBundle:Default:index }
+talent_rating:
+  resource: "@TalentBundle/Resources/config/routing/rating.yml"
+  prefix:   /rating

@@ -1,0 +1,29 @@
+profil_index:
+    path:     /
+    defaults: { _controller: "TalentBundle:Profil:index" }
+    methods:  GET
+
+profil_relatedToProfile:
+    path:     /relatedToProfile/{id}
+    defaults: { _controller: "TalentBundle:Profil:relatedToProfile" }
+    methods:  GET
+
+profil_show:
+    path:     /{id}/show
+    defaults: { _controller: "TalentBundle:Profil:show" }
+    methods:  GET
+
+profil_new:
+    path:     /new
+    defaults: { _controller: "TalentBundle:Profil:new" }
+    methods:  [GET, POST]
+
+profil_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TalentBundle:Profil:edit" }
+    methods:  [GET, POST]
+
+profil_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TalentBundle:Profil:delete" }
+    methods:  DELETE

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Profils list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Address</th>
+                <th>Governorate</th>
+                <th>Age</th>
+                <th>Telephone</th>
+                <th>Talent</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Video</th>
+                <th>Photo</th>
+                <th>Banned</th>
+                <th>Nbbanners</th>
+                <th>Banneduntil</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for profil in profils %}
+            <tr>
+                <td><a href="{{ path('profil_show', { 'id': profil.id }) }}">{{ profil.id }}</a></td>
+                <td>{{ profil.address }}</td>
+                <td>{{ profil.governorate }}</td>
+                <td>{{ profil.age }}</td>
+                <td>{{ profil.telephone }}</td>
+                <td>{{ profil.talent }}</td>
+                <td>{{ profil.category }}</td>
+                <td>{{ profil.description }}</td>
+                <td>{{ profil.video }}</td>
+                <td>{{ profil.photo }}</td>
+                <td>{% if profil.banned %}Yes{% else %}No{% endif %}</td>
+                <td>{{ profil.nbbanners }}</td>
+                <td>{% if profil.banneduntil %}{{ profil.banneduntil|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('profil_show', { 'id': profil.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('profil_edit', { 'id': profil.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('profil_new') }}">Create a new profil</a>
+        </li>
+    </ul>
+{% endblock %}

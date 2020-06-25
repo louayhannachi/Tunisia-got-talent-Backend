@@ -1,0 +1,13 @@
+talent:
+    resource: "@TalentBundle/Resources/config/routing.yml"
+    prefix:   /tgt/talent
+
+event:
+    resource: "@EventBundle/Resources/config/routing.yml"
+    prefix:   /tgt
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
