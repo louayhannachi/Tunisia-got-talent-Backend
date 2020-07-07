@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\HttpFoundation\Response;
+use TalentBundle\Entity\User;
+
 /**
  * Profil controller.
  *
@@ -22,10 +24,10 @@ class ProfilController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $profils = $em->getRepository('TalentBundle:Profil')->findAll();
-        $rating = $em->getRepository('TalentBundle:Rating')->findAll();
-        $likes = $em->getRepository('TalentBundle:Likes')->findAll();
-        $items = array("profils" => $profils,"rating" => $rating,"likes" => $likes);
-        $data = $this->get('jms_serializer')->serialize($items, 'json');
+        //$rating = $em->getRepository('TalentBundle:Rating')->findAll();
+        //$likes = $em->getRepository('TalentBundle:Likes')->findAll();
+        //$items = array("profils" => $profils,"rating" => $rating,"likes" => $likes);
+        $data = $this->get('jms_serializer')->serialize($profils, 'json');
 
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
@@ -39,12 +41,29 @@ class ProfilController extends Controller
         $profils = $em->getRepository('TalentBundle:Profil')->find($id);
         $ratings = $em->getRepository('TalentBundle:Rating')->findBy(["profil"=>$profils]);
         $comments = $em->getRepository('TalentBundle:Comment')->findBy(["profil"=>$profils]);
-
         $likes = $em->getRepository('TalentBundle:Likes')->findBy(["comment"=>$comments]);
 
         $items = array("profils" => $profils,"ratings" => $ratings,"comment"=>$comments,"likes" => $likes);
         $data = $this->get('jms_serializer')->serialize($items, 'json');
 
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
+    /**
+     * Deletes a profil entity.
+     *
+     */
+    public function deleteAction(Request $request, int $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $profil = $em->getRepository('TalentBundle:Profil')->find($id);
+        $em->remove($profil);
+        $em->flush();
+
+        $data = $this->get('jms_serializer')->serialize("Delete with success", 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -56,78 +75,77 @@ class ProfilController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $profil = new Profil();
-        $form = $this->createForm('TalentBundle\Form\ProfilType', $profil);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($profil);
-            $em->flush();
-
-            return $this->redirectToRoute('profil_show', array('id' => $profil->getId()));
+        $parametersAsArray = [];
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
         }
+        $profil->setAddress($parametersAsArray['address']);
+        $profil->setGovernorate($parametersAsArray['governorate']);
+        $profil->setAge($parametersAsArray['age']);
+        $profil->setCategory($parametersAsArray['category']);
+        $profil->setTelephone($parametersAsArray['telephone']);
+        $profil->setTalent($parametersAsArray['talent']);
+        $profil->setDescription($parametersAsArray['description']);
+        $profil->setVideo($parametersAsArray['video']);
+        $profil->setPhoto($parametersAsArray['photo']);
+        $profil->setBanned($parametersAsArray['banned']);
+        $profil->setNbbanners($parametersAsArray['nbbanners']);
+        //$profil->setBanneduntil($parametersAsArray['banneduntil']);
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
+        $profil->setIduser($user);
 
-        return $this->render('profil/new.html.twig', array(
-            'profil' => $profil,
-            'form' => $form->createView(),
-        ));
-    }
 
-    /**
-     * Finds and displays a profil entity.
-     *
-     */
-    public function showAction(Profil $profil)
-    {
-        $deleteForm = $this->createDeleteForm($profil);
+        $em->persist($profil);
+        $em->flush();
 
-        return $this->render('profil/show.html.twig', array(
-            'profil' => $profil,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $data = $this->get('jms_serializer')->serialize($profil, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     /**
      * Displays a form to edit an existing profil entity.
      *
      */
-    public function editAction(Request $request, Profil $profil)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($profil);
-        $editForm = $this->createForm('TalentBundle\Form\ProfilType', $profil);
-        $editForm->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('profil_edit', array('id' => $profil->getId()));
+        $parametersAsArray = [];
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
         }
 
-        return $this->render('profil/edit.html.twig', array(
-            'profil' => $profil,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $profil = $em->getRepository('TalentBundle:Profil')->findOneBy(['id' => $parametersAsArray['id']]);
+        $profil->setAddress($parametersAsArray['address']);
+        $profil->setGovernorate($parametersAsArray['governorate']);
+        $profil->setAge($parametersAsArray['age']);
+        $profil->setCategory($parametersAsArray['category']);
+        $profil->setTelephone($parametersAsArray['telephone']);
+        $profil->setTalent($parametersAsArray['talent']);
+        $profil->setDescription($parametersAsArray['description']);
+        $profil->setVideo($parametersAsArray['video']);
+        $profil->setPhoto($parametersAsArray['photo']);
+        $profil->setBanned($parametersAsArray['banned']);
+        $profil->setNbbanners($parametersAsArray['nbbanners']);
+        //$profil->setBanneduntil($parametersAsArray['banneduntil']);
+
+
+        $em->persist($profil);
+        $em->flush();
+
+        $data = $this->get('jms_serializer')->serialize($profil, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
-    /**
-     * Deletes a profil entity.
-     *
-     */
-    public function deleteAction(Request $request, Profil $profil)
-    {
-        $form = $this->createDeleteForm($profil);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($profil);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('profil_index');
-    }
 
     /**
      * Creates a form to delete a profil entity.
