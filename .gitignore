@@ -13,3 +13,6 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /web/bundles/
+.idea/commandlinetools/Composer_6_26_20_1_00_AM_c.xml 
+.idea/commandlinetools/Symfony_6_26_20_1_00_AM_s.xml 
+.idea/vcs.xml

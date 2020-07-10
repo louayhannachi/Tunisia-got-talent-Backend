@@ -101,7 +101,7 @@ class Profil
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="bannedUntil", type="date", nullable=false)
+     * @ORM\Column(name="bannedUntil", type="date", nullable=true)
      */
     private $banneduntil;
 
