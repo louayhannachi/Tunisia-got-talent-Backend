@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Evenement
  *
- * @ORM\Table(name="evenement")
- * @ORM\Entity(repositoryClass="EventBundle\Repository\EvenementRepository")
+ * @ORM\Table(name="evenement", indexes={@ORM\Index(name="idCat", columns={"idCat"})})
+ * @ORM\Entity
  */
 class Evenement
 {
@@ -49,6 +49,137 @@ class Evenement
      */
     private $nbparticipant;
 
+    /**
+     * @var \EventBundle\Entity\CategoryEvent
+     *
+     * @ORM\ManyToOne(targetEntity="EventBundle\Entity\CategoryEvent")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idCat", referencedColumnName="id")
+     * })
+     */
+    private $idcat;
+
+    /**
+     * @var \TalentBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="iduser", referencedColumnName="id")
+     * })
+     */
+    private $iduser;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * @param string $titre
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNbparticipant()
+    {
+        return $this->nbparticipant;
+    }
+
+    /**
+     * @param int $nbparticipant
+     */
+    public function setNbparticipant($nbparticipant)
+    {
+        $this->nbparticipant = $nbparticipant;
+    }
+
+    /**
+     * @return CategoryEvent
+     */
+    public function getIdcat()
+    {
+        return $this->idcat;
+    }
+
+    /**
+     * @param CategoryEvent $idcat
+     */
+    public function setIdcat($idcat)
+    {
+        $this->idcat = $idcat;
+    }
+
+    /**
+     * @return \TalentBundle\Entity\User
+     */
+    public function getIduser()
+    {
+        return $this->iduser;
+    }
+
+    /**
+     * @param \TalentBundle\Entity\User $iduser
+     */
+    public function setIduser($iduser)
+    {
+        $this->iduser = $iduser;
+    }
 
 }
 

@@ -1,0 +1,15 @@
+ratingevent_index:
+    path:     /{idevent}
+    defaults: { _controller: "EventBundle:RatingEvent:index" }
+    methods:  GET
+
+ratingevent_show:
+    path:     /show
+    defaults: { _controller: "EventBundle:RatingEvent:show" }
+    methods:  GET
+
+ratingevent_new:
+    path:     /new
+    defaults: { _controller: "EventBundle:RatingEvent:new" }
+    methods:  [GET, POST]
+

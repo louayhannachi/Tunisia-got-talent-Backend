@@ -1,0 +1,19 @@
+favoris_index:
+    path:     /{iduser}
+    defaults: { _controller: "EventBundle:Favoris:index" }
+    methods:  GET
+
+favoris_show:
+    path:     /show
+    defaults: { _controller: "EventBundle:Favoris:show" }
+    methods:  [GET, POST]
+
+favoris_new:
+    path:     /new
+    defaults: { _controller: "EventBundle:Favoris:new" }
+    methods:  [GET, POST]
+
+favoris_delete:
+    path:     /delete
+    defaults: { _controller: "EventBundle:Favoris:delete" }
+    methods:  DELETE

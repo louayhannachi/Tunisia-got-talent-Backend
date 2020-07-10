@@ -3,6 +3,11 @@ evenement_index:
     defaults: { _controller: "EventBundle:Evenement:index" }
     methods:  GET
 
+evenement_search:
+    path:     /search
+    defaults: { _controller: "EventBundle:Evenement:search" }
+    methods:  GET
+
 evenement_show:
     path:     /getById/{id}
     defaults: { _controller: "EventBundle:Evenement:show" }
@@ -22,7 +27,3 @@ evenement_delete:
     path:     /delete/{id}
     defaults: { _controller: "EventBundle:Evenement:delete" }
     methods:  DELETE
-evenement_participer:
-    path:     /participer/{id}
-    defaults: { _controller: "EventBundle:Evenement:participer" }
-    methods:  GET

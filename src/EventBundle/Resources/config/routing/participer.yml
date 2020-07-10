@@ -1,0 +1,19 @@
+participer_index:
+    path:     /{idevent}
+    defaults: { _controller: "EventBundle:Participer:index" }
+    methods:  GET
+
+participer_show:
+    path:     /show
+    defaults: { _controller: "EventBundle:Participer:show" }
+    methods:  [GET, POST]
+
+participer_new:
+    path:     /new
+    defaults: { _controller: "EventBundle:Participer:new" }
+    methods:  [GET, POST]
+
+participer_delete:
+    path:     /delete
+    defaults: { _controller: "EventBundle:Participer:delete" }
+    methods:  DELETE
