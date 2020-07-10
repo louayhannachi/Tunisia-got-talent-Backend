@@ -6,7 +6,7 @@ ratingevent_index:
 ratingevent_show:
     path:     /show
     defaults: { _controller: "EventBundle:RatingEvent:show" }
-    methods:  [GET, POST]
+    methods:  GET
 
 ratingevent_new:
     path:     /new
