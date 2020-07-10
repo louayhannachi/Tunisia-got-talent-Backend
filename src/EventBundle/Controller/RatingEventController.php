@@ -100,8 +100,9 @@ class RatingEventController extends Controller
         );
         $em = $this->getDoctrine()->getManager();
 
-        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(["iduser" => $input['iduser'], "idevent" => $input['idevent']]);
-        $data = $this->get('jms_serializer')->serialize($favoris, 'json');
+
+        $rating = $em->getRepository('EventBundle:RatingEvent')->findOneBy(["iduser" => $input['iduser'], "idevent" => $input['idevent']]);
+        $data = $this->get('jms_serializer')->serialize($rating, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
