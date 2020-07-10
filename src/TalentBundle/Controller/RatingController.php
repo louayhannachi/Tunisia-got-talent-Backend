@@ -30,83 +30,98 @@ class RatingController extends Controller
         return $response;
     }
 
+    public function getByProfilIdAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profils = $em->getRepository('TalentBundle:Profil')->find($id);
+        $ratings = $em->getRepository('TalentBundle:Rating')->findBy(["profil"=>$profils]);
+
+        $data = $this->get('jms_serializer')->serialize($ratings, 'json');
+
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
     /**
      * Creates a new rating entity.
      *
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $rating = new Rating();
-        $form = $this->createForm('TalentBundle\Form\RatingType', $rating);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($rating);
-            $em->flush();
-
-            return $this->redirectToRoute('rating_show', array('id' => $rating->getId()));
+        $parametersAsArray = [];
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
         }
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
+        $profil =$em->getRepository('TalentBundle:Profil')->findOneBy(['id' => $parametersAsArray['profil']['id']]);
 
-        return $this->render('rating/new.html.twig', array(
-            'rating' => $rating,
-            'form' => $form->createView(),
-        ));
-    }
+        $rating->setRate($parametersAsArray['rate']);
+        $rating->setIduser($user);
+        $rating->setProfil($profil);
 
-    /**
-     * Finds and displays a rating entity.
-     *
-     */
-    public function showAction(Rating $rating)
-    {
-        $deleteForm = $this->createDeleteForm($rating);
 
-        return $this->render('rating/show.html.twig', array(
-            'rating' => $rating,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $em->persist($rating);
+        $em->flush();
+
+        $data = $this->get('jms_serializer')->serialize($rating, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     /**
      * Displays a form to edit an existing rating entity.
      *
      */
-    public function editAction(Request $request, Rating $rating)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($rating);
-        $editForm = $this->createForm('TalentBundle\Form\RatingType', $rating);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('rating_edit', array('id' => $rating->getId()));
+        $em = $this->getDoctrine()->getManager();
+        $parametersAsArray = [];
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
         }
+        $rating = $em->getRepository('TalentBundle:Rating')->findOneBy(['id' => $parametersAsArray['id']]);
 
-        return $this->render('rating/edit.html.twig', array(
-            'rating' => $rating,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
+        $profil =$em->getRepository('TalentBundle:Profil')->findOneBy(['id' => $parametersAsArray['profil']['id']]);
+
+        $rating->setRate($parametersAsArray['rate']);
+        $rating->setIduser($user);
+        $rating->setProfil($profil);
+
+
+        $em->persist($rating);
+        $em->flush();
+
+        $data = $this->get('jms_serializer')->serialize($rating, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     /**
      * Deletes a rating entity.
      *
      */
-    public function deleteAction(Request $request, Rating $rating)
+    public function deleteAction(Request $request, int $id)
     {
-        $form = $this->createDeleteForm($rating);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $rating = $em->getRepository('TalentBundle:Rating')->find($id);
+        $em->remove($rating);
+        $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($rating);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('rating_index');
+        $data = $this->get('jms_serializer')->serialize("Delete with success", 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     /**
