@@ -50,7 +50,7 @@ class Comment
      *   @ORM\JoinColumn(name="profil", referencedColumnName="id")
      * })
      */
-    private $profil;
+    private $profils;
 
     /**
      * @var \TalentBundle\Entity\User
@@ -139,20 +139,18 @@ class Comment
      */
     public function getProfil()
     {
-        return $this->profil;
+        return $this->profils;
     }
 
     /**
      * @param Profil $profil
      * @return Comment
      */
-    public function setProfil($profil)
+    public function setProfil($profils)
     {
-        $this->profil = $profil;
+        $this->profils = $profils;
         return $this;
     }
-
-
 
     /**
      * @return User

@@ -43,7 +43,7 @@ class Likes
      *
      * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\Comment")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="comment", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="comment", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $comment;
