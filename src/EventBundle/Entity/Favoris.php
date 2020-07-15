@@ -36,7 +36,7 @@ class Favoris
      *
      * @ORM\ManyToOne(targetEntity="EventBundle\Entity\Evenement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idevent", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idevent", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $idevent;

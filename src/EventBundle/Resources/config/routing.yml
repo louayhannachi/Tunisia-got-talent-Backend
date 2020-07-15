@@ -1,15 +1,18 @@
 event_evenement:
-    resource: "@EventBundle/Resources/config/routing/evenement.yml"
-    prefix:   /event
+  resource: "@EventBundle/Resources/config/routing/evenement.yml"
+  prefix:   /event
 participer_evenement:
-    resource: "@EventBundle/Resources/config/routing/participer.yml"
-    prefix:   /participer
+  resource: "@EventBundle/Resources/config/routing/participer.yml"
+  prefix:   /participer
 favoris_evenement:
-    resource: "@EventBundle/Resources/config/routing/favoris.yml"
-    prefix:   /favoris
+  resource: "@EventBundle/Resources/config/routing/favoris.yml"
+  prefix:   /favoris
 rating_evenement:
-    resource: "@EventBundle/Resources/config/routing/ratingEvent.yml"
-    prefix:   /ratingEvent
+  resource: "@EventBundle/Resources/config/routing/ratingEvent.yml"
+  prefix:   /ratingEvent
+category_evenement:
+  resource: "@EventBundle/Resources/config/routing/categoryevent.yml"
+  prefix:   /categoryevent
 event_homepage:
-    path:     /
-    defaults: { _controller: EventBundle:Default:index }
+  path:     /
+  defaults: { _controller: EventBundle:Default:index }
