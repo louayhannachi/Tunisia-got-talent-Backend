@@ -10,3 +10,6 @@ talent_comment:
 talent_likes:
   resource: "@TalentBundle/Resources/config/routing/likes.yml"
   prefix:   /likes
+talent_user:
+  resource: "@TalentBundle/Resources/config/routing/user.yml"
+  prefix:   /user

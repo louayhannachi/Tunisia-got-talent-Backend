@@ -172,8 +172,8 @@ class ProfilController extends Controller
 
         $operator = '%';
         //$profils = $em->getRepository('TalentBundle:Profil')->createQueryBuilder('profil')
-        //    ->where('profil.category = :category')
-        //    ->setParameter('category', $parametersAsArray['category'])
+        //    ->where('profil.category LIKE :category')
+        //    ->setParameter('category', $operator.$parametersAsArray['category'].$operator)
         //    ->getQuery()
         //    ->getResult();
         $data = $this->get('jms_serializer')->serialize($profils, 'json');
