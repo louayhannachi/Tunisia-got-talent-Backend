@@ -70,6 +70,16 @@ class Evenement
     private $iduser;
 
     /**
+     * @var \EventBundle\Entity\CategoryEvent
+     *
+     * @ORM\ManyToOne(targetEntity="EventBundle\Entity\CategoryEvent")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idCat", referencedColumnName="id")
+     * })
+     */
+    private $idCat;
+
+    /**
      * @return int
      */
     public function getId()
@@ -79,10 +89,12 @@ class Evenement
 
     /**
      * @param int $id
+     * @return Evenement
      */
     public function setId($id)
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -95,10 +107,12 @@ class Evenement
 
     /**
      * @param string $titre
+     * @return Evenement
      */
     public function setTitre($titre)
     {
         $this->titre = $titre;
+        return $this;
     }
 
     /**
@@ -111,10 +125,12 @@ class Evenement
 
     /**
      * @param \DateTime $date
+     * @return Evenement
      */
     public function setDate($date)
     {
         $this->date = $date;
+        return $this;
     }
 
     /**
@@ -127,10 +143,12 @@ class Evenement
 
     /**
      * @param string $description
+     * @return Evenement
      */
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
     }
 
     /**
@@ -143,10 +161,12 @@ class Evenement
 
     /**
      * @param int $nbparticipant
+     * @return Evenement
      */
     public function setNbparticipant($nbparticipant)
     {
         $this->nbparticipant = $nbparticipant;
+        return $this;
     }
 
     /**
@@ -159,10 +179,12 @@ class Evenement
 
     /**
      * @param CategoryEvent $idcat
+     * @return Evenement
      */
     public function setIdcat($idcat)
     {
         $this->idcat = $idcat;
+        return $this;
     }
 
     /**
@@ -175,10 +197,12 @@ class Evenement
 
     /**
      * @param \TalentBundle\Entity\User $iduser
+     * @return Evenement
      */
     public function setIduser($iduser)
     {
         $this->iduser = $iduser;
+        return $this;
     }
 
 }

@@ -150,7 +150,7 @@ class EvenementController extends Controller
         $em->remove($evenement);
         $em->flush();
 
-        $data = $this->get('jms_serializer')->serialize($evenement, 'json');
+        $data = $this->get('jms_serializer')->serialize("The event is deleted", 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');

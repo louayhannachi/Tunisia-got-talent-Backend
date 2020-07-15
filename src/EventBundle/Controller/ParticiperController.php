@@ -74,18 +74,18 @@ class ParticiperController extends Controller
         $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
         $participer = $em->getRepository('EventBundle:Participer')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
 
-        if ($evenement->getDate() > new DateTime() and $participer != NULL) {
+        if ($evenement->getDate() > new DateTime("+1 days") and $participer != NULL) {
             $evenement->setNbparticipant($evenement->getNbparticipant() + 1);
             $em->remove($participer);
             $em->flush();
-            $data = $this->get('jms_serializer')->serialize($participer, 'json');
+            $data = $this->get('jms_serializer')->serialize("your participation is deleted", 'json');
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             return $response;
 
         } else {
-            $data = $this->get('jms_serializer')->serialize("Not Found", 'json');
+            $data = $this->get('jms_serializer')->serialize("Cannot", 'json');
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');

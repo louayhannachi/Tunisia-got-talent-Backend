@@ -73,7 +73,7 @@ class FavorisController extends Controller
         if ($favoris != null) {
             $em->remove($favoris);
             $em->flush();
-            $data = $this->get('jms_serializer')->serialize($favoris, 'json');
+            $data = $this->get('jms_serializer')->serialize("The event is deleted from your list", 'json');
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
