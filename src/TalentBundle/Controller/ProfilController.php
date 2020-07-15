@@ -145,21 +145,43 @@ class ProfilController extends Controller
         return $response;
     }
 
+    public function searchAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
+        }
+
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['username' => $parametersAsArray['username']]);
+        if ($parametersAsArray['governorate'] and $user and $parametersAsArray['category']) {
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['governorate'=> $parametersAsArray['governorate'],'category' => $parametersAsArray['category'], 'iduser' =>$user]);
+        } elseif ($parametersAsArray['governorate'] and $parametersAsArray['category']) {
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['governorate'=> $parametersAsArray['governorate'], 'category'=> $parametersAsArray['category']]);
+        } elseif ($user and $parametersAsArray['category']) {
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['category'=> $parametersAsArray['category'], 'iduser' =>$user]);
+        } elseif ($user and $parametersAsArray['governorate']){
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['governorate' => $parametersAsArray['governorate'], 'iduser' =>$user]);
+        } elseif ($user) {
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['iduser' =>$user]);
+        } elseif($parametersAsArray['governorate']) {
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['governorate' => $parametersAsArray['governorate']]);
+        } elseif($parametersAsArray['category']){
+            $profils = $em->getRepository('TalentBundle:Profil')->findBy(['category' => $parametersAsArray['category']]);
+        }
 
 
-    /**
-     * Creates a form to delete a profil entity.
-     *
-     * @param Profil $profil The profil entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Profil $profil)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('profil_delete', array('id' => $profil->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+
+        $operator = '%';
+        //$profils = $em->getRepository('TalentBundle:Profil')->createQueryBuilder('profil')
+        //    ->where('profil.category LIKE :category')
+        //    ->setParameter('category', $operator.$parametersAsArray['category'].$operator)
+        //    ->getQuery()
+        //    ->getResult();
+        $data = $this->get('jms_serializer')->serialize($profils, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
+
+
 }

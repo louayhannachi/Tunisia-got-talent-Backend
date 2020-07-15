@@ -28,4 +28,8 @@ profil_edit:
     defaults: { _controller: "TalentBundle:Profil:edit" }
     methods:  [POST]
 
+profil_search:
+    path:     /search
+    defaults: { _controller: "TalentBundle:Profil:search" }
+    methods:  [GET]
 

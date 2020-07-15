@@ -1,0 +1,10 @@
+likes_like:
+    path:     /like
+    defaults: { _controller: "TalentBundle:Likes:like" }
+    methods:  POST
+
+likes_getLikeByCommentUserID:
+    path:     /getLikeByCommentUserID/{iduser}/{idcomment}
+    defaults: { _controller: "TalentBundle:Likes:getLikeByCommentUserID" }
+    methods:  GET
+

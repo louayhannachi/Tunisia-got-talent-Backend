@@ -123,20 +123,4 @@ class RatingController extends Controller
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
-
-    /**
-     * Creates a form to delete a rating entity.
-     *
-     * @param Rating $rating The rating entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Rating $rating)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('rating_delete', array('id' => $rating->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }
