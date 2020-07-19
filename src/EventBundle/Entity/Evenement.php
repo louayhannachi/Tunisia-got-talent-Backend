@@ -54,7 +54,7 @@ class Evenement
      *
      * @ORM\ManyToOne(targetEntity="EventBundle\Entity\CategoryEvent")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idCat", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idcat", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $idcat;
@@ -64,7 +64,7 @@ class Evenement
      *
      * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="iduser", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="iduser", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $iduser;
