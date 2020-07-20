@@ -40,7 +40,7 @@ class ProfilController extends Controller
 
         $profils = $em->getRepository('TalentBundle:Profil')->find($id);
         $ratings = $em->getRepository('TalentBundle:Rating')->findBy(["profil"=>$profils]);
-        $comments = $em->getRepository('TalentBundle:Comment')->findBy(["profil"=>$profils]);
+        $comments = $em->getRepository('TalentBundle:Comment')->findBy(["profils"=>$profils]);
         $likes = $em->getRepository('TalentBundle:Likes')->findBy(["comment"=>$comments]);
 
         $items = array("profils" => $profils,"ratings" => $ratings,"comment"=>$comments,"likes" => $likes);

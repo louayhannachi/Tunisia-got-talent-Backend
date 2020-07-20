@@ -83,12 +83,9 @@ class CommentController extends Controller
         }
     }
 
-    public function getCommentByProfilAction(Request $request){
+    public function getCommentByProfilAction( $id){
         $em = $this->getDoctrine()->getManager();
-        if ($content = $request->getContent()) {
-            $parametersAsArray = json_decode($content, true);
-        }
-        $comments =$em->getRepository('TalentBundle:Comment')->findBy(['profils' => $parametersAsArray['profil']['id']]);
+        $comments =$em->getRepository('TalentBundle:Comment')->findBy(['profils' => $id]);
         $data = $this->get('jms_serializer')->serialize($comments, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');

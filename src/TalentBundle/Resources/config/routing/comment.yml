@@ -4,7 +4,7 @@ comment_new:
     methods:  [POST]
 
 comment_by_profil:
-    path:     /getCommentByProfil
+    path:     /getCommentByProfil/{id}
     defaults: { _controller: "TalentBundle:Comment:getCommentByProfil" }
     methods:  [GET]
 
