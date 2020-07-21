@@ -1,5 +1,12 @@
 services:
-#    forum.example:
-#        class: ForumBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+  forum.repository:
+    abstract: true
+    factory: ['@doctrine.orm.entity_manager', getRepository]
+    calls:
+      - [setLogger, ['@?logger']]
 
+  forum.article_repository:
+    class: ForumBundle\Repository\ArticleRepository
+    parent: forum.repository
+    arguments: ['ForumBundle:Article']
+    lazy: true

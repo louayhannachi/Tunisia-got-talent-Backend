@@ -2,125 +2,78 @@
 
 namespace ForumBundle\Controller;
 
-use ForumBundle\Entity\Article;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Article controller.
- *
+ * Class ArticleController
+ * @Rest\Prefix("/article")
+ * @Rest\NamePrefix("get_articles_")
+ * @package ForumBundle\Controller
  */
-class ArticleController extends Controller
+class ArticleController extends FOSRestController
 {
+    use ControllerTrait;
+
     /**
-     * Lists all article entities.
+     * Returns all articles
      *
+     * @Rest\Get("/")
      */
-    public function indexAction()
+    public function getAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $articles = $em->getRepository('ForumBundle:Article')->findAll();
-
-        $data = $this->get('jms_serializer')->serialize($articles, 'json');
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        return $response;
+        $articles = $this->getArticleRepository()->findAll();
+        return new Response($this->encode($articles), Response::HTTP_OK);
     }
 
     /**
-     * Creates a new article entity.
+     * Returns article by ID
      *
+     * @Rest\Get("/{id}", requirements={"id"="\d+"})
      */
-    public function newAction(Request $request)
+    public function getIdAction($id)
     {
-        $article = new Article();
-        $form = $this->createForm('ForumBundle\Form\ArticleType', $article);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
-
-            return $this->redirectToRoute('article_show', array('id' => $article->getId()));
-        }
-
-        return $this->render('article/new.html.twig', array(
-            'article' => $article,
-            'form' => $form->createView(),
-        ));
+        $article = $this->getArticleRepository()->load($id);
+        return new Response($this->encode($article), Response::HTTP_OK);
     }
 
     /**
-     * Finds and displays a article entity.
+     * Add article
      *
+     * @Rest\Post("/post")
      */
-    public function showAction(Article $article)
+    public function postAction (Request $request)
     {
-        $deleteForm = $this->createDeleteForm($article);
-
-        return $this->render('article/show.html.twig', array(
-            'article' => $article,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $this->getArticleRepository()->create(json_decode($request->getContent()));
+        return new Response('Article created successfully');
     }
 
     /**
-     * Displays a form to edit an existing article entity.
+     * Updates article
      *
+     * @Rest\Patch("/update/{id}", requirements={"id"="\d+"})
      */
-    public function editAction(Request $request, Article $article)
+    public function patchAction (Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($article);
-        $editForm = $this->createForm('ForumBundle\Form\ArticleType', $article);
-        $editForm->handleRequest($request);
+        $repository = $this->getArticleRepository();
+        $article = $repository->load($id);
+        $this->getArticleRepository()->update($article, json_decode($request->getContent()));
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('article_edit', array('id' => $article->getId()));
-        }
-
-        return $this->render('article/edit.html.twig', array(
-            'article' => $article,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return new Response('Article updated successfully');
     }
 
     /**
-     * Deletes a article entity.
+     * Deletes articles
      *
+     * @Rest\Delete("/delete/{id}", requirements={"id"="\d+"})
      */
-    public function deleteAction(Request $request, Article $article)
+    public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($article);
-        $form->handleRequest($request);
+        $this->getArticleRepository()->remove($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($article);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('article_index');
-    }
-
-    /**
-     * Creates a form to delete a article entity.
-     *
-     * @param Article $article The article entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Article $article)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('article_delete', array('id' => $article->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return new Response('Article deleted successfully');
     }
 }
