@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Participers list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for participer in participers %}
+            <tr>
+                <td><a href="{{ path('participer_show', { 'id': participer.id }) }}">{{ participer.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('participer_show', { 'id': participer.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('participer_edit', { 'id': participer.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('participer_new') }}">Create a new participer</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,24 +1,24 @@
 rating_index:
-    path:     /
+    path:     /getAll
     defaults: { _controller: "TalentBundle:Rating:index" }
     methods:  GET
 
 rating_show:
-    path:     /{id}/show
-    defaults: { _controller: "TalentBundle:Rating:show" }
+    path:     /getByProfilId/{id}
+    defaults: { _controller: "TalentBundle:Rating:getByProfilId" }
     methods:  GET
 
 rating_new:
-    path:     /new
+    path:     /rate
     defaults: { _controller: "TalentBundle:Rating:new" }
-    methods:  [GET, POST]
+    methods:  [PUT]
 
 rating_edit:
-    path:     /{id}/edit
+    path:     /edit
     defaults: { _controller: "TalentBundle:Rating:edit" }
-    methods:  [GET, POST]
+    methods:  [POST]
 
 rating_delete:
-    path:     /{id}/delete
+    path:     /delete/{id}
     defaults: { _controller: "TalentBundle:Rating:delete" }
     methods:  DELETE

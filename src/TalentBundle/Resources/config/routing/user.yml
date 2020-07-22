@@ -1,0 +1,14 @@
+user_login:
+  path:     /loginUser
+  defaults: { _controller: "TalentBundle:User:login" }
+  methods:  [POST]
+
+user_admin_login:
+  path:     /loginAdminUser
+  defaults: { _controller: "TalentBundle:User:loginAdmin" }
+  methods:  [POST]
+
+user_logout:
+  path:     /logoutUser
+  defaults: { _controller: "TalentBundle:User:logout" }
+  methods:  [POST]

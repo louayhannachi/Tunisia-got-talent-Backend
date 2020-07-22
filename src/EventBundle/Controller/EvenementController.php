@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use EventBundle\Repository\EvenementRepository;
 
 /**
  * Evenement controller.
@@ -34,18 +35,45 @@ class EvenementController extends Controller
 
 
     /**
+     * search all evenement entities.
+     *
+     */
+    public function searchAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cat = $em->getRepository('EventBundle:CategoryEvent')->findOneBy(array("titrecat"=>$_GET["search"]));
+        $evenements = $em->getRepository('EventBundle:Evenement')->findBy(array("idcat" => $cat));
+
+        $data = $this->get('jms_serializer')->serialize($evenements, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
+
+    /**
      * Creates a new evenement entity.
      *
      */
     public function newAction(Request $request)
     {
-        $evenement = new Evenement();
-        $evenement->setTitre($_GET["titre"]);
-        $evenement->setDescription($_GET["description"]);
-        $evenement->setNbparticipant($_GET["nbparticipant"]);
-        $evenement->setDate(new DateTime($_GET["date"]));
-
+        $input = json_decode(
+            $request->getContent(),
+            true
+        );
         $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('TalentBundle:User')->find($input['iduser']);
+        $cat = $em->getRepository('EventBundle:CategoryEvent')->find($input['idcat']);
+
+        $evenement = new Evenement();
+        $evenement->setTitre($input['titre']);
+        $evenement->setDescription($input['description']);
+        $evenement->setNbparticipant($input['nbparticipant']);
+        $evenement->setDate(new DateTime($input['date']));
+        $evenement->setIduser($user);
+        $evenement->setIdcat($cat);
         $em->persist($evenement);
         $em->flush();
 
@@ -64,12 +92,22 @@ class EvenementController extends Controller
      */
     public function editAction(Request $request, Evenement $evenement)
     {
-        $evenement->setTitre($_GET["titre"]);
-        $evenement->setDescription($_GET["description"]);
-        $evenement->setNbparticipant($_GET["nbparticipant"]);
-        $evenement->setDate(new DateTime($_GET["date"]));
+        $input = json_decode(
+            $request->getContent(),
+            true
+        );
+        $em = $this->getDoctrine()->getManager();
 
-        $em = $this->getDoctrine()->getManager()->flush();
+        $user = $em->getRepository('TalentBundle:User')->find($input['iduser']);
+        $cat = $em->getRepository('EventBundle:CategoryEvent')->find($input['idcat']);
+
+        $evenement->setTitre($input['titre']);
+        $evenement->setDescription($input['description']);
+        $evenement->setNbparticipant($input['nbparticipant']);
+        $evenement->setDate(new DateTime($input['date']));
+        $evenement->setIduser($user);
+        $evenement->setIdcat($cat);
+        $em->flush();
 
 
         $data = $this->get('jms_serializer')->serialize($evenement, 'json');
@@ -85,13 +123,13 @@ class EvenementController extends Controller
      */
     public function showAction(Evenement $evenement)
     {
-        if ($evenement->getDate()>new DateTime()){
-        $data = $this->get('jms_serializer')->serialize($evenement, 'json');
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        return $response;
-        }else{
+        if ($evenement->getDate() > new DateTime()) {
+            $data = $this->get('jms_serializer')->serialize($evenement, 'json');
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            return $response;
+        } else {
             $data = $this->get('jms_serializer')->serialize("Depassé", 'json');
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
@@ -100,21 +138,6 @@ class EvenementController extends Controller
         }
     }
 
-
-    /**
-     * Creates a form to delete a evenement entity.
-     *
-     * @param Evenement $evenement The evenement entity
-     *
-     * @return Form The form
-     */
-    private function createDeleteForm(Evenement $evenement)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('evenement_delete', array('id' => $evenement->getId())))
-            ->setMethod('DELETE')
-            ->getForm();
-    }
 
     /**
      * Deletes a evenement entity.
@@ -127,33 +150,10 @@ class EvenementController extends Controller
         $em->remove($evenement);
         $em->flush();
 
-        $data = $this->get('jms_serializer')->serialize($evenement, 'json');
+        $data = $this->get('jms_serializer')->serialize("The event is deleted", 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
-    }
-
-    public function participerAction(Evenement $evenement)
-    {
-        if ($evenement->getNbparticipant()>0){
-        $evenement->setNbparticipant($evenement->getNbparticipant()-1);
-
-        $this->getDoctrine()->getManager()->flush();
-            $data = $this->get('jms_serializer')->serialize($evenement, 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-
-        }else{
-            $data = $this->get('jms_serializer')->serialize("Cannot Participate", 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-
-        }
-
     }
 }

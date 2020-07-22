@@ -1,0 +1,19 @@
+comment_new:
+    path:     /createComment
+    defaults: { _controller: "TalentBundle:Comment:new" }
+    methods:  [POST]
+
+comment_by_profil:
+    path:     /getCommentByProfil/{id}
+    defaults: { _controller: "TalentBundle:Comment:getCommentByProfil" }
+    methods:  [GET]
+
+comment_edit:
+    path:     /editComment
+    defaults: { _controller: "TalentBundle:Comment:edit" }
+    methods:  [POST]
+
+comment_delete:
+    path:     /delete/{idcomment}/{iduser}
+    defaults: { _controller: "TalentBundle:Comment:delete" }
+    methods:  DELETE

@@ -1,5 +1,5 @@
 profil_index:
-    path:     /
+    path:     /getAll
     defaults: { _controller: "TalentBundle:Profil:index" }
     methods:  GET
 
@@ -8,22 +8,28 @@ profil_relatedToProfile:
     defaults: { _controller: "TalentBundle:Profil:relatedToProfile" }
     methods:  GET
 
+profil_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "TalentBundle:Profil:delete" }
+    methods:  DELETE
+
 profil_show:
     path:     /{id}/show
     defaults: { _controller: "TalentBundle:Profil:show" }
     methods:  GET
 
 profil_new:
-    path:     /new
+    path:     /create
     defaults: { _controller: "TalentBundle:Profil:new" }
-    methods:  [GET, POST]
+    methods:  [PUT]
 
 profil_edit:
-    path:     /{id}/edit
+    path:     /edit
     defaults: { _controller: "TalentBundle:Profil:edit" }
-    methods:  [GET, POST]
+    methods:  [POST]
 
-profil_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "TalentBundle:Profil:delete" }
-    methods:  DELETE
+profil_search:
+    path:     /search
+    defaults: { _controller: "TalentBundle:Profil:search" }
+    methods:  [GET]
+
