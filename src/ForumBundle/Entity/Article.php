@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Article
 {
+
     /**
      * @var int
      *
@@ -19,79 +20,34 @@ class Article
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    public $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="string", length=255)
      */
-    private $content;
+    public $content;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="category", type="string", length=255)
+     */
+    public $category;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="string")
+     * @ORM\Column(name="publication_date", type="string")
      */
-    private $date;
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    public $publication_date;
 
     /**
-     * Set content
+     * @var \DateTime
      *
-     * @param string $content
-     *
-     * @return Article
+     * @ORM\Column(name="modification_date", type="string", nullable=true)
      */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Article
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-    
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
+    public $modification_date;
 }
 

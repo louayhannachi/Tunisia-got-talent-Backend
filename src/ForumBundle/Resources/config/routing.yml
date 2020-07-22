@@ -1,4 +1,4 @@
 forum:
     resource: "@ForumBundle/Controller/"
     type:     annotation
-    prefix:   /article
+    prefix:   /

@@ -2,9 +2,9 @@
 
 namespace ForumBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,14 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Rest\NamePrefix("get_articles_")
  * @package ForumBundle\Controller
  */
-class ArticleController extends FOSRestController
+class ArticleController extends Controller
 {
     use ControllerTrait;
 
     /**
      * Returns all articles
      *
-     * @Rest\Get("/")
+     * @Rest\Get("/articles")
      */
     public function getAction(Request $request)
     {
@@ -32,7 +32,7 @@ class ArticleController extends FOSRestController
     /**
      * Returns article by ID
      *
-     * @Rest\Get("/{id}", requirements={"id"="\d+"})
+     * @Rest\Get("/article/{id}", requirements={"id"="\d+"})
      */
     public function getIdAction($id)
     {
@@ -43,7 +43,7 @@ class ArticleController extends FOSRestController
     /**
      * Add article
      *
-     * @Rest\Post("/post")
+     * @Rest\Post("/article/post")
      */
     public function postAction (Request $request)
     {
@@ -54,7 +54,7 @@ class ArticleController extends FOSRestController
     /**
      * Updates article
      *
-     * @Rest\Patch("/update/{id}", requirements={"id"="\d+"})
+     * @Rest\Patch("article/update/{id}", requirements={"id"="\d+"})
      */
     public function patchAction (Request $request, $id)
     {
@@ -68,7 +68,7 @@ class ArticleController extends FOSRestController
     /**
      * Deletes articles
      *
-     * @Rest\Delete("/delete/{id}", requirements={"id"="\d+"})
+     * @Rest\Delete("article/delete/{id}", requirements={"id"="\d+"})
      */
     public function deleteAction($id)
     {

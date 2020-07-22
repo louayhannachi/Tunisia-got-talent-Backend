@@ -10,3 +10,15 @@ services:
     parent: forum.repository
     arguments: ['ForumBundle:Article']
     lazy: true
+
+  forum.comment_repository:
+    class: ForumBundle\Repository\CommentRepository
+    parent: forum.repository
+    arguments: ['ForumBundle:Comment']
+    lazy: true
+
+  forum.reaction_repository:
+    class: ForumBundle\Repository\ReactionRepository
+    parent: forum.repository
+    arguments: ['ForumBundle:Reaction']
+    lazy: true

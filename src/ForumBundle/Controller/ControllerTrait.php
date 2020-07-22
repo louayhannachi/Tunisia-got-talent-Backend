@@ -1,7 +1,11 @@
 <?php
 namespace ForumBundle\Controller;
 
+use ForumBundle\Entity\Comment;
+use ForumBundle\Entity\Reaction;
 use ForumBundle\Repository\ArticleRepository;
+use ForumBundle\Repository\CommentRepository;
+use ForumBundle\Repository\ReactionRepository;
 use FOS\RestBundle\View\View;
 use ForumBundle\ForumBundle;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,13 +38,12 @@ trait ControllerTrait
      */
     protected function decode($data)
     {
-        /** @var \Symfony\Component\Serializer\Serializer $serializer */
         $serializer = $this->get('jms_serializer');
         return $serializer->deserialize($data);
     }
 
     /**
-     * @param string $data
+     * @param mixed $data
      *
      * @return mixed
      *
@@ -48,7 +51,6 @@ trait ControllerTrait
      */
     protected function encode($data)
     {
-        /** @var \Symfony\Component\Serializer\Serializer $serializer */
         $serializer = $this->get('jms_serializer');
         return $serializer->serialize($data, 'json');
     }
@@ -59,5 +61,21 @@ trait ControllerTrait
     protected function getArticleRepository()
     {
         return $this->get('forum.article_repository');
+    }
+
+    /**
+     * @return CommentRepository
+     */
+    protected function getCommentRepository()
+    {
+        return $this->get('forum.comment_repository');
+    }
+
+    /**
+     * @return ReactionRepository
+     */
+    protected function getReactionRepository()
+    {
+        return $this->get('forum.reaction_repository');
     }
 }
