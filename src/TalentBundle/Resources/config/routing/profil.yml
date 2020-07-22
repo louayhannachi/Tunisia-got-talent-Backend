@@ -13,11 +13,6 @@ profil_delete:
     defaults: { _controller: "TalentBundle:Profil:delete" }
     methods:  DELETE
 
-profil_show:
-    path:     /{id}/show
-    defaults: { _controller: "TalentBundle:Profil:show" }
-    methods:  GET
-
 profil_new:
     path:     /create
     defaults: { _controller: "TalentBundle:Profil:new" }
@@ -31,5 +26,10 @@ profil_edit:
 profil_search:
     path:     /search
     defaults: { _controller: "TalentBundle:Profil:search" }
+    methods:  [GET]
+
+profil_by_userID:
+    path:     /profilByUSerID/{id}
+    defaults: { _controller: "TalentBundle:Profil:profilByUSerID" }
     methods:  [GET]
 

@@ -45,6 +45,26 @@ class RatingController extends Controller
         return $response;
     }
 
+    public function getByProfilUserIdAction($idProfil,$idUser)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profil = $em->getRepository('TalentBundle:Profil')->find($idProfil);
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $idUser]);
+        $rating = $em->getRepository('TalentBundle:Rating')->findOneBy(['iduser' => $user, 'profil' => $profil]);
+        if ($rating){
+            $data = $this->get('jms_serializer')->serialize($rating->getRate(), 'json');
+        } else {
+            $data = $this->get('jms_serializer')->serialize(0, 'json');
+        }
+
+
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
     /**
      * Creates a new rating entity.
      *
@@ -52,23 +72,29 @@ class RatingController extends Controller
     public function newAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $rating = new Rating();
+
         $parametersAsArray = [];
         if ($content = $request->getContent()) {
             $parametersAsArray = json_decode($content, true);
         }
         $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
         $profil =$em->getRepository('TalentBundle:Profil')->findOneBy(['id' => $parametersAsArray['profil']['id']]);
+        $rating = $em->getRepository('TalentBundle:Rating')->findOneBy(['iduser' => $user, 'profil' => $profil]);
+        if ($rating){
+            $rating->setRate($parametersAsArray['rate']);
+            $em->persist($rating);
+            $em->flush();
+            $data = $this->get('jms_serializer')->serialize("Update", 'json');
+        } else {
+            $rating = new Rating();
+            $rating->setRate($parametersAsArray['rate']);
+            $rating->setIduser($user);
+            $rating->setProfil($profil);
+            $em->persist($rating);
+            $em->flush();
+            $data = $this->get('jms_serializer')->serialize("Create", 'json');
+        }
 
-        $rating->setRate($parametersAsArray['rate']);
-        $rating->setIduser($user);
-        $rating->setProfil($profil);
-
-
-        $em->persist($rating);
-        $em->flush();
-
-        $data = $this->get('jms_serializer')->serialize($rating, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');

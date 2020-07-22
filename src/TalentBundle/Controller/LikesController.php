@@ -15,16 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 class LikesController extends Controller
 {
 
-    public function likeAction(Request $request)
+    public function likeAction(Request $request, int $iduser, int $idcomment )
     {
         $em = $this->getDoctrine()->getManager();
-
-        $parametersAsArray = [];
-        if ($content = $request->getContent()) {
-            $parametersAsArray = json_decode($content, true);
-        }
-        $user = $em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
-        $comment = $em->getRepository('TalentBundle:Comment')->findOneBy(['id' => $parametersAsArray['comment']['id']]);
+        $user = $em->getRepository('TalentBundle:User')->findOneBy(['id' => $iduser]);
+        $comment = $em->getRepository('TalentBundle:Comment')->findOneBy(['id' => $idcomment]);
 
         $like = $em->getRepository('TalentBundle:Likes')->findOneBy(['iduser' => $user, 'comment' => $comment]);
 

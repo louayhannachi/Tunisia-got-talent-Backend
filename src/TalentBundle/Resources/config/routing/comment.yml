@@ -14,6 +14,6 @@ comment_edit:
     methods:  [POST]
 
 comment_delete:
-    path:     /delete/{idcomment}/{iduser}
+    path:     /delete/{idcomment}
     defaults: { _controller: "TalentBundle:Comment:delete" }
     methods:  DELETE
