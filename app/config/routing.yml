@@ -1,6 +1,6 @@
-forum:
+forum_c:
+    prefix: /tgt/
     resource: "@ForumBundle/Resources/config/routing.yml"
-    prefix:   /tgt
 
 talent:
     resource: "@TalentBundle/Resources/config/routing.yml"
