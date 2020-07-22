@@ -1,0 +1,33 @@
+CompetitionBundle\Entity\Competition:
+    type: entity
+    table: null
+    repositoryClass: CompetitionBundle\Repository\CompetitionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nom:
+            type: string
+            length: 255
+        description:
+            type: string
+            length: 255
+        dateDebut:
+            type: string
+            length: 255
+            column: date_debut
+        dateFin:
+            type: string
+            length: 255
+            column: date_fin
+        nbParticipant:
+            type: string
+            length: 255
+            column: nb_participant
+        imgSrc:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

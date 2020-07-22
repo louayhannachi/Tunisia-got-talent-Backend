@@ -1,3 +1,7 @@
+competition:
+    resource: "@CompetitionBundle/Resources/config/routing.yml"
+    prefix:   /tgt/competition
+
 talent:
     resource: "@TalentBundle/Resources/config/routing.yml"
     prefix:   /tgt/talent
