@@ -23,13 +23,6 @@ class Reaction
     public $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="owner_id", type="string")
-     */
-    public $ownerId;
-
-    /**
      * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Article")

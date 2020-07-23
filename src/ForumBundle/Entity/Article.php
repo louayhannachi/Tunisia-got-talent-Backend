@@ -3,6 +3,7 @@
 namespace ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use TalentBundle\Entity\User;
 
 /**
  * Article
@@ -44,10 +45,35 @@ class Article
     public $publication_date;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", nullable=false, referencedColumnName="id")
+     */
+    public $user;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="modification_date", type="string", nullable=true)
      */
     public $modification_date;
+
+/**
+* @return \TalentBundle\Entity\User
+*/
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
 }
 
