@@ -33,3 +33,13 @@ profil_by_userID:
     defaults: { _controller: "TalentBundle:Profil:profilByUSerID" }
     methods:  [GET]
 
+profil_likes_count:
+    path:     /countLikes
+    defaults: { _controller: "TalentBundle:Profil:getNumberOfLikesPerProfil" }
+    methods:  GET
+
+profil_comments_count:
+    path:     /countComments
+    defaults: { _controller: "TalentBundle:Profil:getNumberOfCommentPerProfil" }
+    methods:  GET
+

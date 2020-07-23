@@ -47,7 +47,7 @@ class Comment
      *
      * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\Profil")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="profil", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="profil", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $profils;

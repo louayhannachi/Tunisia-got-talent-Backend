@@ -17,3 +17,4 @@ comment_delete:
     path:     /delete/{idcomment}
     defaults: { _controller: "TalentBundle:Comment:delete" }
     methods:  DELETE
+
