@@ -19,6 +19,6 @@ categoryevent_edit:
     methods:  [GET, POST]
 
 categoryevent_delete:
-    path:     /{id}/delete
+    path:     /delete/{id}
     defaults: { _controller: "EventBundle:CategoryEvent:delete" }
     methods:  DELETE

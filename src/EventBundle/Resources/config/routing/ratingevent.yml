@@ -4,9 +4,9 @@ ratingevent_index:
     methods:  GET
 
 ratingevent_show:
-    path:     /show
+    path:     /show/{idevent}/{iduser}
     defaults: { _controller: "EventBundle:RatingEvent:show" }
-    methods:  [GET, POST]
+    methods:  GET
 
 ratingevent_new:
     path:     /new

@@ -55,35 +55,53 @@ class RatingEventController extends Controller
         $evenement = $em->getRepository('EventBundle:Evenement')->find($input["idevent"]);
         $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
         $ratingEvent = $em->getRepository('EventBundle:RatingEvent')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
-        if ($ratingEvent == NULL) {
-            if ($evenement->getDate() < new DateTime()) {
-                $rating = new RatingEvent();
-                $rating->setIduser($user);
-                $rating->setIdevent($evenement);
-                $rating->setValueEvent($input["value"]);
-                $em->persist($rating);
-                $em->flush();
-                $data = $this->get('jms_serializer')->serialize($rating, 'json');
-                $response = new Response($data);
-                $response->headers->set('Content-Type', 'application/json');
-                $response->headers->set('Access-Control-Allow-Origin', '*');
-                return $response;
-            } else {
-                $data = $this->get('jms_serializer')->serialize("Error Date", 'json');
-                $response = new Response($data);
-                $response->headers->set('Content-Type', 'application/json');
-                $response->headers->set('Access-Control-Allow-Origin', '*');
-                return $response;
-            }
-        } else {
+        if ($ratingEvent){
             $ratingEvent->setValueEvent($input["value"]);
             $em->flush();
             $data = $this->get('jms_serializer')->serialize($ratingEvent, 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
+        } else {
+            $rating = new RatingEvent();
+            $rating->setIduser($user);
+            $rating->setIdevent($evenement);
+            $rating->setValueEvent($input["value"]);
+            $em->persist($rating);
+            $em->flush();
+            $data = $this->get('jms_serializer')->serialize($rating, 'json');
         }
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+
+        //if ($ratingEvent == NULL) {
+        //    if ($evenement->getDate() < new DateTime()) {
+        //        $rating = new RatingEvent();
+        //        $rating->setIduser($user);
+        //        $rating->setIdevent($evenement);
+        //        $rating->setValueEvent($input["value"]);
+        //        $em->persist($rating);
+        //        $em->flush();
+        //        $data = $this->get('jms_serializer')->serialize($rating, 'json');
+        //        $response = new Response($data);
+        //        $response->headers->set('Content-Type', 'application/json');
+        //        $response->headers->set('Access-Control-Allow-Origin', '*');
+        //        return $response;
+        //    } else {
+        //        $data = $this->get('jms_serializer')->serialize("Error Date", 'json');
+        //        $response = new Response($data);
+        //        $response->headers->set('Content-Type', 'application/json');
+        //        $response->headers->set('Access-Control-Allow-Origin', '*');
+        //        return $response;
+        //    }
+        //} else {
+        //    $ratingEvent->setValueEvent($input["value"]);
+        //    $em->flush();
+        //    $data = $this->get('jms_serializer')->serialize($ratingEvent, 'json');
+        //    $response = new Response($data);
+        //    $response->headers->set('Content-Type', 'application/json');
+        //    $response->headers->set('Access-Control-Allow-Origin', '*');
+        //    return $response;
+        //}
 
     }
 
@@ -92,16 +110,17 @@ class RatingEventController extends Controller
      *
      */
     public
-    function showAction(Request $request)
+    function showAction($idevent, $iduser)
     {
-        $input = json_decode(
-            $request->getContent(),
-            true
-        );
+
         $em = $this->getDoctrine()->getManager();
 
-        $rating = $em->getRepository('EventBundle:RatingEvent')->findOneBy(["iduser" => $input['iduser'], "idevent" => $input['idevent']]);
-        $data = $this->get('jms_serializer')->serialize($rating, 'json');
+        $rating = $em->getRepository('EventBundle:RatingEvent')->findOneBy(["iduser" => $iduser, "idevent" => $idevent]);
+        if ($rating){
+            $data = $this->get('jms_serializer')->serialize($rating->getValueEvent(), 'json');
+        } else {
+            $data = $this->get('jms_serializer')->serialize(0, 'json');
+        }
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');

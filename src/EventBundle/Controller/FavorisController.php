@@ -35,19 +35,20 @@ class FavorisController extends Controller
      * Finds and displays a favori entity.
      *
      */
-    public function showAction(Request $request)
+    public function showAction($idevent, $iduser)
     {
-        $input = json_decode(
-            $request->getContent(),
-            true
-        );
+
         $em = $this->getDoctrine()->getManager();
 
-        $evenement = $em->getRepository('EventBundle:Evenement')->find($input["idevent"]);
-        $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
-        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
+        $evenement = $em->getRepository('EventBundle:Evenement')->findOneBy(["id"=>$idevent]);
+        $user = $em->getRepository('TalentBundle:User')->findOneBy(["id"=>$iduser]);
+        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(["idevent" => $evenement, "iduser" => $user]);
 
-        $data = $this->get('jms_serializer')->serialize($favoris, 'json');
+        if($favoris){
+            $data = $this->get('jms_serializer')->serialize(true, 'json');
+        } else {
+            $data = $this->get('jms_serializer')->serialize(false, 'json');
+        }
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -58,17 +59,13 @@ class FavorisController extends Controller
      * Deletes a favori entity.
      *
      */
-    public function deleteAction(Request $request)
+    public function deleteAction($idevent, $iduser)
     {
-        $input = json_decode(
-            $request->getContent(),
-            true
-        );
         $em = $this->getDoctrine()->getManager();
 
-        $evenement = $em->getRepository('EventBundle:Evenement')->find($input["idevent"]);
-        $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
-        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
+        $evenement = $em->getRepository('EventBundle:Evenement')->findOneBy(["id"=>$idevent]);
+        $user = $em->getRepository('TalentBundle:User')->findOneBy(["id"=>$iduser]);
+        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(["idevent" => $evenement, "iduser" => $user]);
 
         if ($favoris != null) {
             $em->remove($favoris);
@@ -92,17 +89,13 @@ class FavorisController extends Controller
      * Creates a new favori entity.
      *
      */
-    public function newAction(Request $request)
+    public function newAction($idevent, $iduser)
     {
-        $input = json_decode(
-            $request->getContent(),
-            true
-        );
 
         $em = $this->getDoctrine()->getManager();
-        $evenement = $em->getRepository('EventBundle:Evenement')->find($input["idevent"]);
-        $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
-        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
+        $evenement = $em->getRepository('EventBundle:Evenement')->findOneBy(["id"=>$idevent]);
+        $user = $em->getRepository('TalentBundle:User')->findOneBy(["id"=>$iduser]);
+        $favoris = $em->getRepository('EventBundle:Favoris')->findOneBy(["idevent" => $evenement, "iduser" => $user]);
 
         if ($favoris == NULL) {
             $favori = new Favoris();

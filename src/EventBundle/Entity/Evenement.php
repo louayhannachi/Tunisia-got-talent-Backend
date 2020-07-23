@@ -29,9 +29,9 @@ class Evenement
     private $titre;
 
     /**
-     * @var \DateTime
+     * @var \string
      *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @ORM\Column(name="date", type="string", nullable=false)
      */
     private $date;
 
@@ -116,7 +116,7 @@ class Evenement
     }
 
     /**
-     * @return \DateTime
+     * @return \string
      */
     public function getDate()
     {
@@ -124,7 +124,7 @@ class Evenement
     }
 
     /**
-     * @param \DateTime $date
+     * @param \string $date
      * @return Evenement
      */
     public function setDate($date)
