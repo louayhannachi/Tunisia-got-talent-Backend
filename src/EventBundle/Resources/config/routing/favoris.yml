@@ -4,16 +4,16 @@ favoris_index:
     methods:  GET
 
 favoris_show:
-    path:     /show
+    path:     /show/{idevent}/{iduser}
     defaults: { _controller: "EventBundle:Favoris:show" }
     methods:  [GET, POST]
 
 favoris_new:
-    path:     /new
+    path:     /new/{idevent}/{iduser}
     defaults: { _controller: "EventBundle:Favoris:new" }
     methods:  [GET, POST]
 
 favoris_delete:
-    path:     /delete
+    path:     /delete/{idevent}/{iduser}
     defaults: { _controller: "EventBundle:Favoris:delete" }
     methods:  DELETE
