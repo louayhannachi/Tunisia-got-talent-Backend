@@ -59,6 +59,7 @@ class ComposerStaticInitcd85b30bbcfac0391e4437a2ba55f669
         'N' => 
         array (
             'Nelmio\\CorsBundle\\' => 18,
+            'Negotiation\\' => 12,
         ),
         'M' => 
         array (
@@ -76,6 +77,7 @@ class ComposerStaticInitcd85b30bbcfac0391e4437a2ba55f669
         array (
             'Fig\\Link\\' => 9,
             'FOS\\UserBundle\\' => 15,
+            'FOS\\RestBundle\\' => 15,
         ),
         'D' => 
         array (
@@ -206,6 +208,10 @@ class ComposerStaticInitcd85b30bbcfac0391e4437a2ba55f669
         array (
             0 => __DIR__ . '/..' . '/nelmio/cors-bundle',
         ),
+        'Negotiation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -225,6 +231,10 @@ class ComposerStaticInitcd85b30bbcfac0391e4437a2ba55f669
         'FOS\\UserBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/friendsofsymfony/user-bundle',
+        ),
+        'FOS\\RestBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofsymfony/rest-bundle',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -288,6 +298,10 @@ class ComposerStaticInitcd85b30bbcfac0391e4437a2ba55f669
         ),
         'J' => 
         array (
+            'JsonpCallbackValidator' => 
+            array (
+                0 => __DIR__ . '/..' . '/willdurand/jsonp-callback-validator/src',
+            ),
             'JMS\\Serializer' => 
             array (
                 0 => __DIR__ . '/..' . '/jms/serializer/src',
