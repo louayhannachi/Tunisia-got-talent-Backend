@@ -3,6 +3,7 @@
 namespace ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use TalentBundle\Entity\User;
 
 /**
  * Article
@@ -37,6 +38,14 @@ class Comment
      */
     protected $article;
 
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", nullable=false, referencedColumnName="id")
+     */
+    protected $user;
+
 
     /**
      * @var string
@@ -66,6 +75,21 @@ class Comment
     public function setArticle($article)
     {
         $this->article = $article;
+    }
+    /**
+     * @return \TalentBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 
 }

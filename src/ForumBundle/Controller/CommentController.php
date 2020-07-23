@@ -124,4 +124,20 @@ class CommentController extends Controller
 
         return new Response('Comment deleted successfully');
     }
+
+    /**
+     * Returns comments of a given user
+     *
+     * @Rest\Get("/comments/{user_id}", requirements={"id"="\d+"})
+     *
+     * @param $user_id
+     *
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getCommentsByUserId($user_id)
+    {
+        $comments = $this->getCommentRepository()->loadByUserId($user_id);
+        return new Response($this->encode($comments), Response::HTTP_OK);
+    }
 }

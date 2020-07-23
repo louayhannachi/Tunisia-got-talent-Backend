@@ -30,7 +30,14 @@ class ArticleRepository extends Repository
     public function update($article, $content)
     {
         foreach ($content as $property => $value) {
-            $article->{$property} = $value;
+            if ($property === "user"){
+                if (null !== ($user = $this->_em->getRepository('TalentBundle:User')->find($value))){
+                    $article->setUser($user);
+                }
+            }else {
+                $article->{$property} = $value;
+
+            }
         }
         $this->store($article);
     }
@@ -85,5 +92,22 @@ class ArticleRepository extends Repository
         }
         $this->_em->remove($article);
         $this->_em->flush($article);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function loadByUserId($id)
+    {
+        if (null === ($articles = $this->findBy(['user' => $id]))) {
+            throw new NotFoundHttpException(
+                (new \ReflectionClass($this->getClassName()))->getShortName() . ' not found with given Id.'
+            );
+        }
+        return $articles;
     }
 }
