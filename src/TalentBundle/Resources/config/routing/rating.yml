@@ -8,6 +8,11 @@ rating_show:
     defaults: { _controller: "TalentBundle:Rating:getByProfilId" }
     methods:  GET
 
+rating_by_user_profil_show:
+    path:     /getByProfilUserId/{idProfil}/{idUser}
+    defaults: { _controller: "TalentBundle:Rating:getByProfilUserId" }
+    methods:  GET
+
 rating_new:
     path:     /rate
     defaults: { _controller: "TalentBundle:Rating:new" }

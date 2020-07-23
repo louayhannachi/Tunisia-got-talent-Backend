@@ -2,6 +2,7 @@
 
 namespace TalentBundle\Controller;
 
+use TalentBundle\Entity\count;
 use TalentBundle\Entity\Profil;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,23 @@ class ProfilController extends Controller
         return $response;
     }
 
+    public function profilByUSerIDAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $id]);
+        $profil = $em->getRepository('TalentBundle:Profil')->findOneBy(['iduser' => $user]);
+
+        if($profil){
+            $data = $this->get('jms_serializer')->serialize($profil, 'json');
+        } else {
+            $data = $this->get('jms_serializer')->serialize(null, 'json');
+        }
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
     /**
      * Deletes a profil entity.
      *
@@ -90,8 +108,8 @@ class ProfilController extends Controller
         $profil->setDescription($parametersAsArray['description']);
         $profil->setVideo($parametersAsArray['video']);
         $profil->setPhoto($parametersAsArray['photo']);
-        $profil->setBanned($parametersAsArray['banned']);
-        $profil->setNbbanners($parametersAsArray['nbbanners']);
+        $profil->setBanned(0);
+        $profil->setNbbanners(0);
         //$profil->setBanneduntil($parametersAsArray['banneduntil']);
         $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
         $profil->setIduser($user);
@@ -130,8 +148,8 @@ class ProfilController extends Controller
         $profil->setDescription($parametersAsArray['description']);
         $profil->setVideo($parametersAsArray['video']);
         $profil->setPhoto($parametersAsArray['photo']);
-        $profil->setBanned($parametersAsArray['banned']);
-        $profil->setNbbanners($parametersAsArray['nbbanners']);
+        $profil->setBanned(0);
+        $profil->setNbbanners(0);
         //$profil->setBanneduntil($parametersAsArray['banneduntil']);
 
 
@@ -182,6 +200,53 @@ class ProfilController extends Controller
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
+
+    public function getNumberOfLikesPerProfilAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $profils = $em->getRepository('TalentBundle:Profil')->findAll();
+        $tab = array();
+        foreach($profils as $p) {
+            $number = 0;
+            $comments = $em->getRepository('TalentBundle:Comment')->findBy(['profils'=>$p->getId()]);
+            foreach($comments as $c) {
+                $number = $number + $c->getNblike();
+            };
+            $count = new count();
+            $count->setNbslike($number);
+            $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $p->getIduser()]);
+            $count->setUsername($user->getUsernameCanonical());
+            array_push($tab,$count);
+        };
+        $data = $this->get('jms_serializer')->serialize($tab, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
+    public function getNumberOfCommentPerProfilAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $profils = $em->getRepository('TalentBundle:Profil')->findAll();
+        $tab = array();
+        foreach($profils as $p) {
+            $number = 0;
+            $comments = $em->getRepository('TalentBundle:Comment')->findBy(['profils'=>$p->getId()]);
+            foreach($comments as $c) {
+                $number ++;
+            };
+            $count = new count();
+            $count->setNbslike($number);
+            $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $p->getIduser()]);
+            $count->setUsername($user->getUsernameCanonical());
+            array_push($tab,$count);
+        };
+        $data = $this->get('jms_serializer')->serialize($tab, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
 
 
 }

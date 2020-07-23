@@ -1,5 +1,24 @@
 services:
-#    forum.example:
-#        class: ForumBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+  forum.repository:
+    abstract: true
+    factory: ['@doctrine.orm.entity_manager', getRepository]
+    calls:
+      - [setLogger, ['@?logger']]
 
+  forum.article_repository:
+    class: ForumBundle\Repository\ArticleRepository
+    parent: forum.repository
+    arguments: ['ForumBundle:Article']
+    lazy: true
+
+  forum.comment_repository:
+    class: ForumBundle\Repository\CommentRepository
+    parent: forum.repository
+    arguments: ['ForumBundle:Comment']
+    lazy: true
+
+  forum.reaction_repository:
+    class: ForumBundle\Repository\ReactionRepository
+    parent: forum.repository
+    arguments: ['ForumBundle:Reaction']
+    lazy: true

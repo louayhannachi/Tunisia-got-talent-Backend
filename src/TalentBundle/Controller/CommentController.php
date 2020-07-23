@@ -25,10 +25,9 @@ class CommentController extends Controller
         if ($content = $request->getContent()) {
             $parametersAsArray = json_decode($content, true);
         }
-        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
-        $profil =$em->getRepository('TalentBundle:Profil')->findOneBy(['id' => $parametersAsArray['profil']['id']]);
-        if ($profil->getIduser()->getId() != $user->getId())
-        {
+        $user = $em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
+        $profil = $em->getRepository('TalentBundle:Profil')->findOneBy(['id' => $parametersAsArray['profil']['id']]);
+        if ($profil->getIduser()->getId() != $user->getId()) {
             $comment->setProfil($profil);
             $comment->setIduser($user);
             $comment->setText($parametersAsArray['text']);
@@ -60,32 +59,22 @@ class CommentController extends Controller
         if ($content = $request->getContent()) {
             $parametersAsArray = json_decode($content, true);
         }
-        $comment =$em->getRepository('TalentBundle:Comment')->findOneBy(['id' => $parametersAsArray['id']]);
-        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['iduser']['id']]);
+        $comment = $em->getRepository('TalentBundle:Comment')->findOneBy(['id' => $parametersAsArray['id']]);
+        $comment->setText($parametersAsArray['text']);
+        $em->persist($comment);
+        $em->flush();
 
-        if ($comment->getIduser()->getId() == $user->getId())
-        {
-            $comment->setText($parametersAsArray['text']);
-            $em->persist($comment);
-            $em->flush();
-
-            $data = $this->get('jms_serializer')->serialize($comment, 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-        } else {
-            $data = $this->get('jms_serializer')->serialize('this comment does not belong to you !', 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-        }
+        $data = $this->get('jms_serializer')->serialize($comment, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
-    public function getCommentByProfilAction( $id){
+    public function getCommentByProfilAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
-        $comments =$em->getRepository('TalentBundle:Comment')->findBy(['profils' => $id]);
+        $comments = $em->getRepository('TalentBundle:Comment')->findBy(['profils' => $id]);
         $data = $this->get('jms_serializer')->serialize($comments, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
@@ -93,26 +82,19 @@ class CommentController extends Controller
         return $response;
     }
 
-    public function deleteAction(Request $request, $idcomment, $iduser)
+    public function deleteAction(Request $request, $idcomment)
     {
         $em = $this->getDoctrine()->getManager();
         $comment = $em->getRepository('TalentBundle:Comment')->findOneBy(['id' => $idcomment]);
-        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $iduser]);
 
-        if ($comment->getIduser()->getId() == $user->getId()){
-            $em->remove($comment);
-            $em->flush();
-            $data = $this->get('jms_serializer')->serialize("Delete with success", 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-        } else {
-            $data = $this->get('jms_serializer')->serialize("this comment does not belong to you !", 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-        }
+        $em->remove($comment);
+        $em->flush();
+        $data = $this->get('jms_serializer')->serialize("Delete with success", 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+
     }
+
 }
