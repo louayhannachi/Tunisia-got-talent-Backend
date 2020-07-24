@@ -1,0 +1,4 @@
+services:
+#    sponsoring.example:
+#        class: SponsoringBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
