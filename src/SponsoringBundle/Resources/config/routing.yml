@@ -1,0 +1,61 @@
+sponsoring_homepage:
+    path:     /
+    defaults: { _controller: SponsoringBundle:Default:index }
+
+
+
+sponsoring_addEntreprise:
+    path:     /addEntreprise
+    defaults: { _controller: SponsoringBundle:Default:addEntreprise }
+
+sponsoring_modifierEntreprise:
+    path:     /modifierEntreprise
+    defaults: { _controller: SponsoringBundle:Default:modifierEntreprise }
+
+
+sponsoring_supprimerEntreprise:
+    path:     /supprimerEntreprise
+    defaults: { _controller: SponsoringBundle:Default:supprimerEntreprise }
+
+
+sponsoring_afficherEntreprise:
+    path:     /afficherEntreprise
+    defaults: { _controller: SponsoringBundle:Default:afficherEntreprise }
+
+
+sponsoring_addSponsorise:
+    path:     /addSponsorise
+    defaults: { _controller: SponsoringBundle:Default:addSponsorise }
+
+sponsoring_modifierSponsorise:
+    path:     /modifierSponsorise
+    defaults: { _controller: SponsoringBundle:Default:modifierSponsorise }
+
+
+sponsoring_supprimerSponsorise:
+    path:     /supprimerSponsorise
+    defaults: { _controller: SponsoringBundle:Default:supprimerSponsorise }
+
+
+sponsoring_afficherSponsorise:
+    path:     /afficherSponsorise
+    defaults: { _controller: SponsoringBundle:Default:afficherSponsorise }
+
+
+sponsoring_search:
+    path:     /search
+    defaults: { _controller: SponsoringBundle:Default:search }
+
+sponsoring_sort:
+    path:     /sort
+    defaults: { _controller: SponsoringBundle:Default:sort }
+
+
+entreprise_getDateEntreprise:
+    path:     /getDateEntreprise
+    defaults: { _controller: SponsoringBundle:Default:getDateEntreprise }
+
+entreprise_getDateSponsorise:
+    path:     /getDateSponsorise
+    defaults: { _controller: SponsoringBundle:Default:getDateSponsorise }
+

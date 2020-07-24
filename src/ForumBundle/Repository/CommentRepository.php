@@ -33,7 +33,13 @@ class CommentRepository extends Repository
     public function update($comment, $content, $article = null)
     {
         foreach ($content as $property => $value) {
-            $comment->{$property} = $value;
+            if ($property === "user"){
+                if (null !== ($user = $this->_em->getRepository('TalentBundle:User')->find($article->user))){
+                    $comment->setUser($user);
+                }
+            }else{
+                $comment->{$property} = $value;
+            }
         }
 
         if (null !== $article) {
@@ -110,5 +116,22 @@ class CommentRepository extends Repository
         }
         $this->_em->remove($comment);
         $this->_em->flush($comment);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function loadByUserId($id)
+    {
+        if (null === ($comments = $this->findBy(['user' => $id]))) {
+            throw new NotFoundHttpException(
+                (new \ReflectionClass($this->getClassName()))->getShortName() . ' not found with given Id.'
+            );
+        }
+        return $comments;
     }
 }

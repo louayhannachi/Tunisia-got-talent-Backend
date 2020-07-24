@@ -76,4 +76,20 @@ class ArticleController extends Controller
 
         return new Response('Article deleted successfully');
     }
+
+    /**
+     * Returns articles of a given user
+     *
+     * @Rest\Get("/articles/{user_id}", requirements={"id"="\d+"})
+     *
+     * @param $user_id
+     *
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getArticlesByUserId($user_id)
+    {
+        $comments = $this->getArticleRepository()->loadByUserId($user_id);
+        return new Response($this->encode($comments), Response::HTTP_OK);
+    }
 }
