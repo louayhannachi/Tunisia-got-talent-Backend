@@ -4,7 +4,7 @@ participer_index:
     methods:  GET
 
 participer_show:
-    path:     /show
+    path:     /show/{idEvent}/{idUser}
     defaults: { _controller: "EventBundle:Participer:show" }
     methods:  [GET, POST]
 

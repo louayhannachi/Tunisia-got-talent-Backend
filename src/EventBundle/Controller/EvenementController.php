@@ -64,15 +64,14 @@ class EvenementController extends Controller
         );
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('TalentBundle:User')->find($input['iduser']);
-        $cat = $em->getRepository('EventBundle:CategoryEvent')->find($input['idcat']);
+        $cat = $em->getRepository('EventBundle:CategoryEvent')->findOneBy(['id' => $input['idcat']]);
 
         $evenement = new Evenement();
         $evenement->setTitre($input['titre']);
         $evenement->setDescription($input['description']);
         $evenement->setNbparticipant($input['nbparticipant']);
-        $evenement->setDate(new DateTime($input['date']));
-        $evenement->setIduser($user);
+        $evenement->setDate($input['date']);
+        $evenement->setIduser(null);
         $evenement->setIdcat($cat);
         $em->persist($evenement);
         $em->flush();
@@ -90,7 +89,7 @@ class EvenementController extends Controller
      * Displays a form to edit an existing evenement entity.
      *
      */
-    public function editAction(Request $request, Evenement $evenement)
+    public function editAction(Request $request)
     {
         $input = json_decode(
             $request->getContent(),
@@ -98,14 +97,14 @@ class EvenementController extends Controller
         );
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('TalentBundle:User')->find($input['iduser']);
-        $cat = $em->getRepository('EventBundle:CategoryEvent')->find($input['idcat']);
+        $evenement = $em->getRepository('EventBundle:Evenement')->findOneBy(["id"=>$input["id"]]);
+        $cat = $em->getRepository('EventBundle:CategoryEvent')->findOneBy(["id"=>$input["idcat"]["id"]]);
 
         $evenement->setTitre($input['titre']);
         $evenement->setDescription($input['description']);
         $evenement->setNbparticipant($input['nbparticipant']);
-        $evenement->setDate(new DateTime($input['date']));
-        $evenement->setIduser($user);
+        $evenement->setDate($input['date']);
+        $evenement->setIduser(null);
         $evenement->setIdcat($cat);
         $em->flush();
 
@@ -123,19 +122,12 @@ class EvenementController extends Controller
      */
     public function showAction(Evenement $evenement)
     {
-        if ($evenement->getDate() > new DateTime()) {
             $data = $this->get('jms_serializer')->serialize($evenement, 'json');
             $response = new Response($data);
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             return $response;
-        } else {
-            $data = $this->get('jms_serializer')->serialize("Depassé", 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-        }
+
     }
 
 
