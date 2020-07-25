@@ -247,6 +247,36 @@ class ProfilController extends Controller
         return $response;
     }
 
+    public function getRatingStatAction(){
+        $em = $this->getDoctrine()->getManager();
+        $profils = $em->getRepository('TalentBundle:Profil')->findAll();
+        $tab = array();
+        foreach($profils as $p) {
+            $rate = 0;
+            $ratings = $em->getRepository('TalentBundle:Rating')->findBy(['profil'=>$p->getId()]);
+            $count = new count();
+            $size = sizeof($ratings);
+
+            if ($size> 0){
+                foreach($ratings as $c) {
+                    $rate = $rate + $c->getRate();
+                };
+                $count->setNbslike($rate / $size);
+            } else {
+                $count->setNbslike(0);
+            }
+
+            $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $p->getIduser()]);
+            $count->setUsername($user->getUsernameCanonical());
+            array_push($tab,$count);
+        };
+        $data = $this->get('jms_serializer')->serialize($tab, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+    }
+
 
 
 }
