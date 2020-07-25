@@ -43,3 +43,7 @@ profil_comments_count:
     defaults: { _controller: "TalentBundle:Profil:getNumberOfCommentPerProfil" }
     methods:  GET
 
+profil_rate_count:
+    path:     /getMoyenneRate
+    defaults: { _controller: "TalentBundle:Profil:getRatingStat" }
+    methods:  GET
