@@ -13,6 +13,32 @@ use Doctrine\ORM\Mapping as ORM;
 class Sponsorise
 {
     /**
+     * @var \TalentBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="TalentBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="iduser", referencedColumnName="id",onDelete="CASCADE")
+     * })
+     */
+    private $iduser;
+
+    /**
+     * @return \TalentBundle\Entity\User
+     */
+    public function getIduser()
+    {
+        return $this->iduser;
+    }
+
+    /**
+     * @param \TalentBundle\Entity\User $iduser
+     */
+    public function setIduser($iduser)
+    {
+        $this->iduser = $iduser;
+    }
+
+    /**
      * @ORM\ManyToOne(targetEntity="Entreprise")
      * @ORM\JoinColumn(name="Entreprise_id", referencedColumnName="id")
      */

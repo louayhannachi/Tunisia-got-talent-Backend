@@ -59,3 +59,11 @@ entreprise_getDateSponsorise:
     path:     /getDateSponsorise
     defaults: { _controller: SponsoringBundle:Default:getDateSponsorise }
 
+entreprise_afficherEntrepriseByUser:
+    path:     /afficherEntrepriseByUser
+    defaults: { _controller: SponsoringBundle:Default:afficherEntrepriseByUser }
+
+
+entreprise_afficherSponsoriseByUser:
+    path:     /afficherSponsoriseByUser
+    defaults: { _controller: SponsoringBundle:Default:afficherSponsoriseByUser }

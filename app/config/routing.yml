@@ -1,6 +1,6 @@
 sponsoring:
     resource: "@SponsoringBundle/Resources/config/routing.yml"
-    prefix:   /sponsoring
+    prefix:   /tgt/sponsoring
 
 competition:
     resource: "@CompetitionBundle/Resources/config/routing.yml"
