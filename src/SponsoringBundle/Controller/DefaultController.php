@@ -81,7 +81,7 @@ class DefaultController extends Controller
         return new JsonResponse($formatted);
 
     }
-    public function afficherEntrepriseAction()//lister les pieces defectueuses non reserver (pour le reparateur)
+    public function afficherEntrepriseAction()
     {
         $entreprises = $this->getDoctrine()->getManager()
             ->getRepository('SponsoringBundle:Entreprise')
@@ -91,6 +91,16 @@ class DefaultController extends Controller
         return new JsonResponse($formatted);
     }
 
+    public function afficherEntrepriseByUserAction(Request $request)
+    {
+        $idUser = $request->get('idUser');
+        $entreprises = $this->getDoctrine()->getManager()
+            ->getRepository('SponsoringBundle:Entreprise')
+            ->findByIduser($idUser);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($entreprises);
+        return new JsonResponse($formatted);
+    }
 
     public function addSponsoriseAction(Request $request)
     {
@@ -163,6 +173,17 @@ class DefaultController extends Controller
             ->findAll();
         $serializer = new Serializer([new ObjectNormalizer()]);
         $formatted = $serializer->normalize($sponsorise);
+        return new JsonResponse($formatted);
+    }
+
+    public function afficherSponsoriseByUserAction(Request $request)
+    {
+        $idUser = $request->get('idUser');
+        $entreprises = $this->getDoctrine()->getManager()
+            ->getRepository('SponsoringBundle:Sponsorise')
+            ->findByIduser($idUser);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($entreprises);
         return new JsonResponse($formatted);
     }
 
