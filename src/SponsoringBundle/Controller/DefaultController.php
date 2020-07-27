@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -86,9 +87,12 @@ class DefaultController extends Controller
         $entreprises = $this->getDoctrine()->getManager()
             ->getRepository('SponsoringBundle:Entreprise')
             ->findAll();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($entreprises);
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($entreprises, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     public function afficherEntrepriseByUserAction(Request $request)
