@@ -26,7 +26,12 @@ class ArticleController extends Controller
     public function getAction(Request $request)
     {
         $articles = $this->getArticleRepository()->findAll();
-        return new Response($this->encode($articles), Response::HTTP_OK);
+        $data = $this->get('jms_serializer')->serialize($articles, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+        //return new Response($this->encode($articles), Response::HTTP_OK);
     }
 
     /**
@@ -37,7 +42,12 @@ class ArticleController extends Controller
     public function getIdAction($id)
     {
         $article = $this->getArticleRepository()->load($id);
-        return new Response($this->encode($article), Response::HTTP_OK);
+        $data = $this->get('jms_serializer')->serialize($article, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+        //return new Response($this->encode($article), Response::HTTP_OK);
     }
 
     /**
@@ -48,7 +58,12 @@ class ArticleController extends Controller
     public function postAction (Request $request)
     {
         $this->getArticleRepository()->create(json_decode($request->getContent()));
-        return new Response('Article created successfully');
+        $data = $this->get('jms_serializer')->serialize('Article created successfully', 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+        //return new Response('Article created successfully');
     }
 
     /**
@@ -73,8 +88,11 @@ class ArticleController extends Controller
     public function deleteAction($id)
     {
         $this->getArticleRepository()->remove($id);
-
-        return new Response('Article deleted successfully');
+        $data = $this->get('jms_serializer')->serialize('Article deleted successfully', 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     /**

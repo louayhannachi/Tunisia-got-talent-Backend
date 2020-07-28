@@ -53,7 +53,7 @@ class ReactionController extends Controller
     /**
      * Returns comment by article id
      *
-     * @Rest\Get("article/{article_id}/reaction", requirements={"article_id"="\d+"})
+     * @Rest\Get("article/reaction/{article_id}", requirements={"article_id"="\d+"})
      *
      * @param $article_id
      *
@@ -90,8 +90,12 @@ class ReactionController extends Controller
             $comment = $this->getCommentRepository()->load($content->comment_id);
         }
         $this->getReactionRepository()->create($content, null !== $article ? $article : $comment);
-
-        return new Response('Reaction added successfully');
+        $data = $this->get('jms_serializer')->serialize("success", 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+        //return new Response('Reaction added successfully');
     }
 
     /**

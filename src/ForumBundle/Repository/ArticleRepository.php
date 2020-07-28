@@ -30,7 +30,7 @@ class ArticleRepository extends Repository
     public function update($article, $content)
     {
         foreach ($content as $property => $value) {
-            if ($property === "user"){
+            if ($property === "user_id"){
                 if (null !== ($user = $this->_em->getRepository('TalentBundle:User')->find($value))){
                     $article->setUser($user);
                 }
