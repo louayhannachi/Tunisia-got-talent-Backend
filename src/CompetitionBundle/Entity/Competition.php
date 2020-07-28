@@ -40,7 +40,17 @@ class Competition
     /**
      * @var string
      */
-    private $imgSrc;
+    private $nbMaxParticipant;
+
+    /**
+     * @var string
+     */
+    private $compType;
+
+    /**
+     * @var string
+     */
+    private $userId;
 
 
     /**
@@ -173,28 +183,81 @@ class Competition
         return $this->nbParticipant;
     }
 
-    /**
-     * Set imgSrc
+  /**
+     * Set nbMaxParticipant
      *
-     * @param string $imgSrc
+     * @param string $nbMaxParticipant
      *
      * @return Competition
      */
-    public function setImgSrc($imgSrc)
+    public function setNbMaxParticipant($nbMaxParticipant)
     {
-        $this->imgSrc = $imgSrc;
+        $this->nbMaxParticipant = $nbMaxParticipant;
     
         return $this;
     }
 
     /**
-     * Get imgSrc
+     * Get nbMaxParticipant
      *
      * @return string
      */
-    public function getImgSrc()
+    public function getNbMaxParticipant()
     {
-        return $this->imgSrc;
+        return $this->nbMaxParticipant;
     }
+
+    
+  /**
+     * Set compType
+     *
+     * @param string $compType
+     *
+     * @return Competition
+     */
+    public function setCompType($compType)
+    {
+        $this->compType = $compType;
+    
+        return $this;
+    }
+
+    /**
+     * Get compType
+     *
+     * @return string
+     */
+    public function getCompType()
+    {
+        return $this->compType;
+    }
+
+
+        /**
+     * Get UserId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param string $userId
+     *
+     * @return Competition
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    
+        return $this;
+    }
+
+
+
 }
 

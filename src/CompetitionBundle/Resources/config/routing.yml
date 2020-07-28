@@ -1,3 +1,49 @@
-competition_homepage:
-    path:     /
-    defaults: { _controller: CompetitionBundle:Default:index }
+competition_getAll:
+    path:     /getAll
+    defaults: { _controller: CompetitionBundle:Competition:getAll }
+    methods:  GET
+
+competition_getParticipations:
+    path:     /getParticipations
+    defaults: { _controller: CompetitionBundle:Competition:getParticipations }
+    methods:  GET
+
+competition_getRatings:
+    path:     /getRatings
+    defaults: { _controller: CompetitionBundle:Competition:getRatings }
+    methods:  GET
+
+competition_new:
+    path:     /newMock
+    defaults: { _controller: CompetitionBundle:Competition:newMock }
+    methods:  GET
+
+competition_create:
+    path:     /create
+    defaults: { _controller: CompetitionBundle:Competition:create }
+    methods:  [PUT]
+
+competition_show:
+    path:     /{id}/show
+    defaults: { _controller: "CompetitionBundle:Competition:show" }
+    methods:  GET
+
+competition_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CompetitionBundle:Competition:edit" }
+    methods:  [GET, POST]
+
+competition_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "CompetitionBundle:Competition:delete" }
+    methods:  DELETE
+
+competition_participate:
+    path:     /participate
+    defaults: { _controller: "CompetitionBundle:Competition:participate" }
+    methods:  POST
+
+competition_rating:
+    path:     /rate
+    defaults: { _controller: "CompetitionBundle:Competition:rate" }
+    methods:  POST
