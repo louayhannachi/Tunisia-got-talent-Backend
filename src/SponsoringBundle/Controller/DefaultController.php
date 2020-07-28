@@ -22,64 +22,77 @@ class DefaultController extends Controller
     public function addEntrepriseAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $parametersAsArray = [];
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
+        }
         $entreprise = new Entreprise();
-        $entreprise->setNom($request->get('nom'));
-        $entreprise->setLieux($request->get('lieux'));
-        $entreprise->setEmail($request->get('email'));
-        $entreprise->setSiteOfficiel($request->get('site_officiel'));
-        $entreprise->setNbrEmploye($request->get('nbr_employe'));
+        $entreprise->setNom($parametersAsArray['name']);
+        $entreprise->setLieux($parametersAsArray['place']);
+        $entreprise->setEmail($parametersAsArray['email']);
+        $entreprise->setSiteOfficiel($parametersAsArray['site']);
+        $entreprise->setNbrEmploye($parametersAsArray['nbEmp']);
+        $user =$em->getRepository('TalentBundle:User')->findOneBy(['id' => $parametersAsArray['id_user']]);
 
+        $entreprise->setIduser($user);
         $s = $request->get('date_creation');
         $date = date_create_from_format('Y-m-d', $s);
-        $entreprise->setDateCreation($date);
-
+        $entreprise->setDateCreation(new \DateTime());
         $em->persist($entreprise);
         $em->flush();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($entreprise);
-        return new JsonResponse($formatted);
+
+
+        $data = $this->get('jms_serializer')->serialize($entreprise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
     public function modifierEntrepriseAction(Request $request)
     {
-
-
-        $idEntreprise = $request->get('id');
         $em = $this->getDoctrine()->getManager();
-        $entreprise  =   $this->getDoctrine()->getRepository('SponsoringBundle:Entreprise')->find($idEntreprise);
 
-        $nom = $request->get('nom');
-        $lieux = $request->get('lieux');
-        $email = $request->get('email');
-        $site_officiel = $request->get('site_officiel');
-        $nbr_employe = $request->get('nbr_employe');
-        $entreprise->setNom($nom);
-        $entreprise->setLieux($lieux);
-        $entreprise->setEmail($email);
-        $entreprise->setSiteOfficiel($site_officiel);
-        $entreprise->setNbrEmploye($nbr_employe);
+        $parametersAsArray = [];
+        if ($content = $request->getContent()) {
+            $parametersAsArray = json_decode($content, true);
+        }
+        $entreprise = $em->getRepository('SponsoringBundle:Entreprise')->findOneBy(['id' => $parametersAsArray['id']]);
+
+        $entreprise->setNom($parametersAsArray['name']);
+        $entreprise->setLieux($parametersAsArray['place']);
+        $entreprise->setEmail($parametersAsArray['email']);
+        $entreprise->setSiteOfficiel($parametersAsArray['site']);
+        $entreprise->setNbrEmploye($parametersAsArray['nbEmp']);
 
         $em->persist($entreprise);
         $em->flush();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize("entreprise modifie");
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($entreprise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
-    public function supprimerEntrepriseAction(Request $request)
+    public function supprimerEntrepriseAction(Request $request, $id)
     {
 
-
-        $idEntreprise = $request->get('id');
         $em = $this->getDoctrine()->getManager();
-        $entreprise  =   $this->getDoctrine()->getRepository('SponsoringBundle:Entreprise')->find($idEntreprise);
+        $entreprise = $em->getRepository('SponsoringBundle:Entreprise')->find($id);
+
         $em->remove($entreprise);
         $em->flush();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize("entreprise supprime");
-        return new JsonResponse($formatted);
+
+
+
+        $data = $this->get('jms_serializer')->serialize('delet succ', 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
     public function afficherEntrepriseAction()
@@ -95,15 +108,15 @@ class DefaultController extends Controller
         return $response;
     }
 
-    public function afficherEntrepriseByUserAction(Request $request)
-    {
-        $idUser = $request->get('idUser');
-        $entreprises = $this->getDoctrine()->getManager()
-            ->getRepository('SponsoringBundle:Entreprise')
-            ->findByIduser($idUser);
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($entreprises);
-        return new JsonResponse($formatted);
+    public function afficherEntrepriseByEventAction(Request $request, $id)
+    {   $em = $this->getDoctrine()->getManager();
+        $entreprise =$em->getRepository('SponsoringBundle:Entreprise')->findOneBy(['id' => $id]);
+
+        $data = $this->get('jms_serializer')->serialize($entreprise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     public function addSponsoriseAction(Request $request)
@@ -124,9 +137,12 @@ class DefaultController extends Controller
 
         $em->persist($sponsorise);
         $em->flush();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($sponsorise);
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($entreprise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
@@ -150,9 +166,12 @@ class DefaultController extends Controller
 
         $em->persist($sponsorise);
         $em->flush();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($sponsorise);
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($sponsorise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
     public function supprimerSponsoriseAction(Request $request)
@@ -164,9 +183,12 @@ class DefaultController extends Controller
         $entreprise  =   $this->getDoctrine()->getRepository('SponsoringBundle:Sponsorise')->find($idSponsorise);
         $em->remove($entreprise);
         $em->flush();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize("Sponsorise supprime");
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($entreprise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
@@ -175,9 +197,12 @@ class DefaultController extends Controller
         $sponsorise = $this->getDoctrine()->getManager()
             ->getRepository('SponsoringBundle:Sponsorise')
             ->findAll();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($sponsorise);
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($sponsorise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     public function afficherSponsoriseByUserAction(Request $request)
@@ -186,27 +211,38 @@ class DefaultController extends Controller
         $entreprises = $this->getDoctrine()->getManager()
             ->getRepository('SponsoringBundle:Sponsorise')
             ->findByIduser($idUser);
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($entreprises);
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($entreprises, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     public function searchAction(Request $request)
     {
         $nom = $request->get('nom');
-        $entreprise = $this->getDoctrine()->getRepository('SponsoringBundle:Entreprise')->search_by_nom($nom);
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($entreprise);
-        return new JsonResponse($formatted);
+        $entreprise = $this->getDoctrine()->getRepository('SponsoringBundle:Entreprise')->
+        search_by_nom($nom);
+
+        $data = $this->get('jms_serializer')->serialize($entreprise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
     public function sortAction()
     {
-        $sponsorise = $this->getDoctrine()->getRepository('SponsoringBundle:Sponsorise')->sort_by_Date();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($sponsorise);
-        return new JsonResponse($formatted);
+        $sponsorise = $this->getDoctrine()->getRepository('SponsoringBundle:Sponsorise')
+            ->sort_by_Date();
+
+        $data = $this->get('jms_serializer')->serialize($sponsorise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
@@ -244,9 +280,12 @@ class DefaultController extends Controller
         $array_merged = [
             "DateSp"=>$result,
         ];
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($array_merged);
-        return new JsonResponse($formatted);
+
+        $data = $this->get('jms_serializer')->serialize($sponsorise, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 }
