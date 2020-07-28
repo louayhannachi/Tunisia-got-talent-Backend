@@ -40,7 +40,7 @@ class Sponsorise
 
     /**
      * @ORM\ManyToOne(targetEntity="Entreprise")
-     * @ORM\JoinColumn(name="Entreprise_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="Entreprise_id", referencedColumnName="id",onDelete="CASCADE")
      */
     private $entreprise;
 
