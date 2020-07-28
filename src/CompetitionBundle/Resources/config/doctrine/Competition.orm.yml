@@ -27,7 +27,16 @@ CompetitionBundle\Entity\Competition:
             type: string
             length: 255
             column: nb_participant
-        imgSrc:
+        nbMaxParticipant:
             type: string
             length: 255
+            column: nb_max_participant
+        compType:
+            type: string
+            length: 255
+            column: comp_type
+        userId:
+            type: string
+            length: 255
+            column: userId
     lifecycleCallbacks: {  }
