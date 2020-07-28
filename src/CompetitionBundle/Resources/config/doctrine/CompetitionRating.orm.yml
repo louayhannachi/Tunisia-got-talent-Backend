@@ -1,0 +1,21 @@
+CompetitionBundle\Entity\CompetitionRating:
+    type: entity
+    table: null
+    repositoryClass: CompetitionBundle\Repository\CompetitionRatingRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idComp:
+            type: string
+            length: 255
+        idUser:
+            type: string
+            length: 255
+        rateValue:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

@@ -1,0 +1,18 @@
+CompetitionBundle\Entity\CompetitionParticipation:
+    type: entity
+    table: null
+    repositoryClass: CompetitionBundle\Repository\CompetitionParticipationRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idComp:
+            type: string
+            length: 255
+        idUser:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }
