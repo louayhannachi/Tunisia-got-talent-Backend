@@ -53,7 +53,7 @@ class CommentController extends Controller
     /**
      * Returns comment by article id
      *
-     * @Rest\Get("/{article_id}/comment", requirements={"article_id"="\d+"})
+     * @Rest\Get("/commentByArticle/{article_id}", requirements={"article_id"="\d+"})
      *
      * @param $article_id
      *
@@ -83,7 +83,12 @@ class CommentController extends Controller
         $article = $this->getArticleRepository()->load($content->article_id);
         $this->getCommentRepository()->create($content, $article);
 
-        return new Response('Comment added successfully');
+        $data = $this->get('jms_serializer')->serialize("Comment added successfully", 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
+        //return new Response('Comment added successfully');
     }
 
     /**

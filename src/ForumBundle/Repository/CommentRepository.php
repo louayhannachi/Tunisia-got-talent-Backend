@@ -33,7 +33,7 @@ class CommentRepository extends Repository
     public function update($comment, $content, $article = null)
     {
         foreach ($content as $property => $value) {
-            if ($property === "user"){
+            if ($property === "user_id"){
                 if (null !== ($user = $this->_em->getRepository('TalentBundle:User')->find($article->user))){
                     $comment->setUser($user);
                 }
@@ -93,7 +93,7 @@ class CommentRepository extends Repository
     public function loadByArticleId($id)
     {
         /** @var Comment|null $comment */
-        if (null === ($comment = $this->findBy(['article_id' => $id]))) {
+        if (null === ($comment = $this->findBy(['article' => $id]))) {
             throw new NotFoundHttpException(
                 (new \ReflectionClass($this->getClassName()))->getShortName() . ' not found with given Id.'
             );
