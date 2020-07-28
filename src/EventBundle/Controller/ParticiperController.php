@@ -39,19 +39,21 @@ class ParticiperController extends Controller
      * Finds and displays a participer entity.
      *
      */
-    public function showAction(Request $request)
+    public function showAction($idEvent, $idUser)
     {
-        $input = json_decode(
-            $request->getContent(),
-            true
-        );
 
         $em = $this->getDoctrine()->getManager();
-        $evenement = $em->getRepository('EventBundle:Evenement')->find($input["idevent"]);
-        $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
+        $evenement = $em->getRepository('EventBundle:Evenement')->findOneBy(["id"=>$idEvent]);;
+        $user = $em->getRepository('TalentBundle:User')->findOneBy(["id"=>$idUser]);
         $participer = $em->getRepository('EventBundle:Participer')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
 
-        $data = $this->get('jms_serializer')->serialize($participer, 'json');
+        if ($participer){
+            $data = $this->get('jms_serializer')->serialize(true, 'json');
+
+        } else {
+            $data = $this->get('jms_serializer')->serialize(false, 'json');
+
+        }
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -105,11 +107,10 @@ class ParticiperController extends Controller
             true
         );
         $em = $this->getDoctrine()->getManager();
-        $evenement = $em->getRepository('EventBundle:Evenement')->find($input["idevent"]);
-        $user = $em->getRepository('TalentBundle:User')->find($input["iduser"]);
+        $evenement = $em->getRepository('EventBundle:Evenement')->find($input["id_event"]);
+        $user = $em->getRepository('TalentBundle:User')->find($input["id_user"]);
         $participer = $em->getRepository('EventBundle:Participer')->findOneBy(array("idevent" => $evenement, "iduser" => $user));
 
-        if ($evenement->getDate() > new DateTime() and $evenement->getNbparticipant() > 0 and $participer == NULL) {
             $evenement->setNbparticipant($evenement->getNbparticipant() - 1);
 
             $part = new Participer();
@@ -123,13 +124,5 @@ class ParticiperController extends Controller
             $response->headers->set('Access-Control-Allow-Origin', '*');
             return $response;
 
-        } else {
-            $data = $this->get('jms_serializer')->serialize("Cannot Participate", 'json');
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-
-        }
     }
 }

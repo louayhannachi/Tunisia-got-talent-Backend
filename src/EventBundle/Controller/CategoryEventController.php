@@ -40,7 +40,7 @@ class CategoryEventController extends Controller
             true
         );
         $categorieevent = new CategoryEvent();
-        $categorieevent->setTitrecat($input["categorie"]);
+        $categorieevent->setTitrecat($input["titrecat"]);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($categorieevent);
@@ -57,9 +57,12 @@ class CategoryEventController extends Controller
      * Finds and displays a categorieevent entity.
      *
      */
-    public function showAction(CategoryEvent $categorieevent)
+    public function showAction($id)
     {
-        $data = $this->get('jms_serializer')->serialize($categorieevent, 'json');
+        $em = $this->getDoctrine()->getManager();
+        $category = $em->getRepository('EventBundle:CategoryEvent')->findOneBy(["id"=>$id]);
+
+        $data = $this->get('jms_serializer')->serialize($category, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -70,18 +73,19 @@ class CategoryEventController extends Controller
      * Displays a form to edit an existing categorieevent entity.
      *
      */
-    public function editAction(Request $request, CategoryEvent $categorieevent)
+    public function editAction(Request $request)
     {
         $input = json_decode(
             $request->getContent(),
             true
         );
-        $categorieevent->setTitrecat($input["categorie"]);
-
         $em = $this->getDoctrine()->getManager();
+
+        $category = $em->getRepository('EventBundle:CategoryEvent')->findOneBy(["id"=>$input["id"]]);
+        $category->setTitrecat($input["titrecat"]);
         $em->flush();
 
-        $data = $this->get('jms_serializer')->serialize($categorieevent, 'json');
+        $data = $this->get('jms_serializer')->serialize($category, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');

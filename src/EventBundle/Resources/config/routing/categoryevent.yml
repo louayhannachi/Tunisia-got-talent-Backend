@@ -4,7 +4,7 @@ categoryevent_index:
     methods:  GET
 
 categoryevent_show:
-    path:     /{id}/show
+    path:     /show/{id}
     defaults: { _controller: "EventBundle:CategoryEvent:show" }
     methods:  GET
 
@@ -14,7 +14,7 @@ categoryevent_new:
     methods:  [GET, POST]
 
 categoryevent_edit:
-    path:     /{id}/edit
+    path:     /edit
     defaults: { _controller: "EventBundle:CategoryEvent:edit" }
     methods:  [GET, POST]
 
